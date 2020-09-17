@@ -1,5 +1,5 @@
 
-implicit def listBracket: Bracket[List, Throwable] = ???
+implicit def listBracket: Bracket[List] = ???
 
 def barf: Unit = {
   val resource: Resource[List, Unit] = ???
@@ -8,8 +8,8 @@ def barf: Unit = {
   } yield ()
 }
 
-trait Bracket[F[_], E]
+trait Bracket[F[_]]
 
 sealed abstract class Resource[+F[_], +A] {
-  def allocated[G[x] >: F[x], B >: A](implicit F: Bracket[G, Throwable]): G[(B, G[Unit])] = ???
+  def allocated[G[x] >: F[x], B >: A](implicit F: Bracket[G]): G[(B, G[Unit])] = ???
 }
