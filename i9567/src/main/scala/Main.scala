@@ -1,8 +1,7 @@
 
-def barf: Unit = {
-  val resource: Resource[List] = ???
+def barf(resource: Resource[List]): Unit = {
   for {
-    res <- resource.allocated
+    res <-resource.allocated
   } yield ()
 }
 
