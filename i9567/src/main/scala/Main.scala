@@ -6,5 +6,5 @@ def barf(resource: Resource[List]): Unit = {
 }
 
 trait Resource[F[_]] {
-  def allocated[G[x] >: F[x]]: G[Unit]
+  def allocated[G[x] >: F[x]]: G[Int]
 }
