@@ -6,6 +6,6 @@ def barf: Unit = {
   } yield ()
 }
 
-class Resource[F[_]] {
-  def allocated[G[x] >: F[x]]: G[Unit] = ???
+trait Resource[F[_]] {
+  def allocated[G[x] >: F[x]]: G[Unit]
 }
