@@ -10,6 +10,6 @@ def barf: Unit = {
 
 trait Bracket[F[_]]
 
-sealed abstract class Resource[+F[_], +A] {
+sealed abstract class Resource[+F[_], A] {
   def allocated[G[x] >: F[x], B >: A](implicit F: Bracket[G]): G[(B, G[Unit])] = ???
 }
