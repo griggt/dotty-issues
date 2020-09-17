@@ -1,11 +1,11 @@
 
 def barf: Unit = {
-  val resource: Resource[List, Unit] = ???
+  val resource: Resource[List] = ???
   for {
     res <- resource.allocated
   } yield ()
 }
 
-class Resource[F[_], A] {
-  def allocated[G[x] >: F[x]]: G[(A, G[Unit])] = ???
+class Resource[F[_]] {
+  def allocated[G[x] >: F[x]]: G[(Unit, G[Unit])] = ???
 }
