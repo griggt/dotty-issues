@@ -1,10 +1,10 @@
 
-def barf(resource: Resource[List]): Unit = {
-  for {
-    res <-resource.allocated
-  } yield ()
+trait Foo[F[_]] {
+  def foo[G[x] >: F[x]]: G[Int]
 }
 
-trait Resource[F[_]] {
-  def allocated[G[x] >: F[x]]: G[Int]
+def bar(x: Foo[List]): Unit = {
+  for {
+    _ <- x.foo
+  } yield ()
 }
