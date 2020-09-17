@@ -1,10 +1,15 @@
-
 trait Foo[F[_]] {
-  def foo[G[x] >: F[x]]: G[Int]
+  def foo[G[x] >: F[x]]: G[Unit]
 }
 
-def bar(x: Foo[List]): Unit = {
+trait M[A] {
+  def flatMap[B](f: A => M[B]): M[B]
+  def map[B](f: A => B): M[B]
+}
+
+def bar(x: Foo[M]): Unit = {
+  val a = x.foo
   for {
-    _ <- x.foo
+    _ <- a
   } yield ()
 }
