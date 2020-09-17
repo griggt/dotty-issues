@@ -7,5 +7,5 @@ def barf: Unit = {
 }
 
 sealed abstract class Resource[F[_], A] {
-  def allocated[G[x] >: F[x], B >: A]: G[(B, G[Unit])] = ???
+  def allocated[G[x] >: F[x]]: G[(A, G[Unit])] = ???
 }
