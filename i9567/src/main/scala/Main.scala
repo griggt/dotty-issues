@@ -1,5 +1,3 @@
-import cats.MonadError
-
 
 implicit def listBracket: Bracket[List, Throwable] = ???
 
@@ -10,7 +8,7 @@ def barf: Unit = {
   } yield ()
 }
 
-trait Bracket[F[_], E] extends MonadError[F, E]
+trait Bracket[F[_], E]
 
 sealed abstract class Resource[+F[_], +A] {
   def allocated[G[x] >: F[x], B >: A](implicit F: Bracket[G, Throwable]): G[(B, G[Unit])] = ???

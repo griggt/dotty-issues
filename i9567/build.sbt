@@ -9,5 +9,5 @@ lazy val root = project
     scalaVersion := dottyVersion,
     scalacOptions ++= Seq("-Ykind-projector"),
 
-    libraryDependencies += "org.typelevel" %% "cats-effect" % "2.2-e395f06-SNAPSHOT"
+    //libraryDependencies += "org.typelevel" %% "cats-effect" % "2.2-e395f06-SNAPSHOT"
   )
