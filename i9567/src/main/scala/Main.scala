@@ -7,5 +7,5 @@ def barf: Unit = {
 }
 
 class Resource[F[_]] {
-  def allocated[G[x] >: F[x]]: G[(Unit, G[Unit])] = ???
+  def allocated[G[x] >: F[x]]: G[Unit] = ???
 }
