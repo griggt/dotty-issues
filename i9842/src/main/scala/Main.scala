@@ -1,14 +1,10 @@
-trait Measure[-C]      // The - is needed
-trait FingerTree[+A] { // The + is needed
-  def op[A1 >: A](a: A1): A
+trait Foo[+A] {
+  def foo[A1 >: A](a: A1): A
 }
 
+trait Bar[-C]
+
 trait X {
-  def empty[A](m: Measure[A]): FingerTree[A]
-
-  def test(meas: Measure[Int]): Int = {
-    val tree = empty(meas)
-    return tree.op(2) + 1
-  }
-
+  def bla[A](m: Bar[A]): Foo[A]
+  def baz(x: Bar[Int]): Int = bla(x).foo(2) + 1
 }
