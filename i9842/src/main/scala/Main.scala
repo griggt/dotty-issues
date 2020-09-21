@@ -1,12 +1,14 @@
 trait Measure[-C]      // The - is needed
-trait FingerTree[+A]   // The + is needed
+trait FingerTree[+A] { // The + is needed
+  def op[A1 >: A](a: A1): A
+}
 
-object X {
-  def empty[A](m: Measure[A]): FingerTree[A] = ???
+trait X {
+  def empty[A](m: Measure[A]): FingerTree[A]
 
-  def test(meas: Measure[Long]): FingerTree[Long] = {
-    val tree = empty(meas)  // problem origin
-    return tree
+  def test(meas: Measure[Int]): Int = {
+    val tree = empty(meas)
+    return tree.op(2) + 1
   }
 
 }
