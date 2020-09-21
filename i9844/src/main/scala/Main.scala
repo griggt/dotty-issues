@@ -1,15 +1,17 @@
-trait Foo[A] {
-  def test(x: A, y: A): Boolean
+object DetSkipOctree {
+  sealed trait Leaf  [PL]
+  sealed trait Branch[PL]
 }
+trait DetSkipOctree[PL]
 
-trait Baz[A]  {
-  type Q = A
-  val baz: A
+class Impl[PL] extends DetSkipOctree[PL] {
+  final type Leaf = DetSkipOctree.Leaf[PL]
 
-  trait Bar {
-    this: Foo[A] =>
-    def bar(a: Q): Unit = {
-      test(a, baz)
-    }
+  type PLL = PL
+
+  protected trait LeftBranchImpl {
+    this: DetSkipOctree.Branch[PL] =>
+
+    def demoteLeaf(point: PLL, leaf: Leaf): Unit = ???
   }
 }
