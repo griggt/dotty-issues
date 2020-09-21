@@ -1,15 +1,12 @@
-trait Measure[-C]   // The - is needed
-
-object PathMeasure extends Measure[Long]
-
+trait Measure[-C]      // The - is needed
 trait FingerTree[+A]   // The + is needed
-object FingerTree {
+
+object X {
   def empty[A](m: Measure[A]): FingerTree[A] = ???
-}
 
-
-trait Test {
-  def read(sz: Int): Any = {
-    var tree = FingerTree.empty(PathMeasure)  // problem origin
+  def test(meas: Measure[Long]): FingerTree[Long] = {
+    val tree = empty(meas)  // problem origin
+    return tree
   }
+
 }
