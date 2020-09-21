@@ -1,11 +1,8 @@
-trait Foo
-object Foo {
-  trait Bar[A]
-}
+trait Foo[A]
 
-class Baz[A] extends Foo {
-  trait BarBar {
-    this: Foo.Bar[A] =>
+class Baz[A]  {
+  trait Bar {
+    this: Foo[A] =>
     def bar(a: A): Unit
   }
 }
