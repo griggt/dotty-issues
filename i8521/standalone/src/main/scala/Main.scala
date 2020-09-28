@@ -3,13 +3,9 @@ import scala.quoted.{Expr, Type, QuoteContext}
 object BoomInspect {
   inline def inspect[T <: AnyKind]: String = ${ goAny[T] }
 
-  def goAny[T <: AnyKind : Type](using qctx: QuoteContext): Expr[String] = {
-    goBoom[T]
-    ???
-  }
-
-  def goBoom[T <: AnyKind : Type](using qctx0: QuoteContext): Unit = {
+  def goAny[T <: AnyKind : Type](using qctx0: QuoteContext): Expr[String] = {
     new BoomInspector { val qctx = qctx0 }.doBoom[T]
+    ???
   }
 }
 
