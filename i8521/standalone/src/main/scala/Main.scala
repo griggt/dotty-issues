@@ -1,22 +1,18 @@
 import scala.quoted.{Expr, Type, QuoteContext}
 
 object Foo {
-  inline def foo[T <: AnyKind]: String = ${ baz[T] }
+  inline def foo[T <: AnyKind]: String = ${ bar[T] }
 
-  def baz[T <: AnyKind : Type](using qctx0: QuoteContext): Expr[String] = {
-    new Bar { val qctx = qctx0 }.bar[T]
-    ???
-  }
-}
+  def bar[T <: AnyKind : Type](using qctx: QuoteContext): Expr[String] = {
+    given as qctx.type = qctx
+    import qctx.tasty.{Type => TType, given _, _}
 
-abstract class Bar {
-  val qctx: QuoteContext
-  given as qctx.type = qctx
-  import qctx.tasty.{Type => TType, given _, _}
+    def packageToName(tree: Tree): Unit = tree match {
+      case PackageDef(_, owner) =>
+        packageToName(owner)
+    }
 
-  def bar[T <: AnyKind : Type]: Unit = {
     val sym = implicitly[Type[T]].unseal.symbol
-
     if (!sym.isNoSymbol) {
       sym.tree match {
         case c: ClassDef =>
@@ -28,11 +24,7 @@ abstract class Bar {
           }
       }
     }
-  }
 
-  private def packageToName(tree: Tree): Unit = tree match {
-    case PackageDef(_, owner) =>
-      packageToName(owner)
+    ???
   }
-
 }
