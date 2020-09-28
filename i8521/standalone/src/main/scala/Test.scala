@@ -1,7 +1,5 @@
-class F
+class A
 
 object Test {
-  def test(): Unit = {
-    val fooTag = BoomInspect.inspect[F]
-  }
+  def test() = Foo.foo[A]
 }

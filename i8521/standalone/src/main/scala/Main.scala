@@ -1,29 +1,29 @@
 import scala.quoted.{Expr, Type, QuoteContext}
 
-object BoomInspect {
-  inline def inspect[T <: AnyKind]: String = ${ goAny[T] }
+object Foo {
+  inline def foo[T <: AnyKind]: String = ${ baz[T] }
 
-  def goAny[T <: AnyKind : Type](using qctx0: QuoteContext): Expr[String] = {
-    new BoomInspector { val qctx = qctx0 }.doBoom[T]
+  def baz[T <: AnyKind : Type](using qctx0: QuoteContext): Expr[String] = {
+    new Bar { val qctx = qctx0 }.bar[T]
     ???
   }
 }
 
-abstract class BoomInspector {
+abstract class Bar {
   val qctx: QuoteContext
   given as qctx.type = qctx
   import qctx.tasty.{Type => TType, given _, _}
 
-  def doBoom[T <: AnyKind : Type]: Unit = {
-    val symbol = implicitly[Type[T]].unseal.symbol
+  def bar[T <: AnyKind : Type]: Unit = {
+    val sym = implicitly[Type[T]].unseal.symbol
 
-    if (!symbol.isNoSymbol) {
-      symbol.tree match {
+    if (!sym.isNoSymbol) {
+      sym.tree match {
         case c: ClassDef =>
-          if (!symbol.maybeOwner.isNoSymbol) {
-            symbol.maybeOwner.tree match {
+          if (!sym.maybeOwner.isNoSymbol) {
+            sym.maybeOwner.tree match {
               case _: PackageDef =>
-                packageToName(symbol.maybeOwner.tree)
+                packageToName(sym.maybeOwner.tree)
             }
           }
       }
