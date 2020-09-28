@@ -1,11 +1,11 @@
-import scala.quoted.{Expr, Type, QuoteContext}
+import scala.quoted._
 
 object Foo {
   inline def foo[T <: AnyKind]: String = ${ bar[T] }
 
   def bar[T <: AnyKind : Type](using qctx: QuoteContext): Expr[String] = {
     given as qctx.type = qctx
-    import qctx.tasty.{Type => TType, given _, _}
+    import qctx.tasty.{Type => _, given _, _}
 
     def packageToName(tree: Tree): Unit = tree match {
       case PackageDef(_, owner) =>
