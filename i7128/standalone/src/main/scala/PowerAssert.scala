@@ -20,7 +20,7 @@ class PowerAssert extends Recorder[Boolean, Unit] {
   }
   */
 
-  override lazy val listener: RecorderListener[Boolean, Unit] = ??? //new AssertListener
+  //override lazy val listener: RecorderListener[Boolean, Unit] = ??? //new AssertListener
 }
 
 /*
