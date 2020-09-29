@@ -21,51 +21,20 @@ class RecorderMacro(using qctx0: QuoteContext) {
     }
   }
 
-  private[this] def recordExpressions(runtime: Term, recording: Term): List[Term] = {
-    val ast = recording.showExtractors
-
-    val resetValuesSel: Term = {
-      val m = runtimeSym.method("resetValues").head
-      runtime.select(m)
-    }
-
-    List(
-      Apply(resetValuesSel, List()),
-      recordExpression(runtime, "", ast, recording)
-    )
+  private def recordExpressions(runtime: Term, recording: Term): List[Term] = {
+    List(recordExpression(runtime, recording))
   }
 
-  // emit recorderRuntime.recordExpression(<source>, <tree>, instrumented)
-  private[this] def recordExpression(runtime: Term, source: String, ast: String, expr: Term): Term = {
-    val instrumented = recordAllValues(runtime, expr)
-    val recordExpressionSel: Term = {
-      val m = runtimeSym.method("recordExpression").head
-      runtime.select(m)
-    }
-    Apply(recordExpressionSel,
-      List(
-        Literal(Constant(source)),
-        Literal(Constant(ast)),
-        instrumented
-      ))
+  private def recordExpression(runtime: Term, expr: Term): Term = {
+    recordAllValues(runtime, expr)
   }
 
   private def recordAllValues(runtime: Term, expr: Term): Term =
     recordValue(runtime, recordSubValues(runtime, expr), expr)
-    // expr match {
-      // case New(_)     => ???
-      // case Literal(_) => ???
-      // case Typed(r @ Repeated(xs, y), tpe) => ??? //recordSubValues(runtime, r)
-      //case _ => recordValue(runtime, recordSubValues(runtime, expr), expr)
-    // }
 
   private def recordSubValues(runtime: Term, expr: Term): Term =
     expr match {
       case Apply(x, ys)     => Apply(recordAllValues(runtime, x), ys.map(recordAllValues(runtime, _)))
-      //case TypeApply(x, ys) => ??? //TypeApply.copy(expr)(recordSubValues(runtime, x), ys)
-      //case Select(x, y)     => ??? //Select.copy(expr)(recordAllValues(runtime, x), y)
-      //case Typed(x, tpe)    => ??? //Typed.copy(expr)(recordSubValues(runtime, x), tpe)
-      //case Repeated(xs, y)  => ??? //Repeated.copy(expr)(xs.map(recordAllValues(runtime, _)), y)
       case _                => expr
     }
 
@@ -75,20 +44,7 @@ class RecorderMacro(using qctx0: QuoteContext) {
       runtime.select(m)
     }
 
-    // TEG overriding skipIdent to `true` prevents the crash
-    /*
-    def skipIdent(sym: Symbol): Boolean =
-      sym.fullName match {
-        case "scala" | "java" => true
-        case fullName if fullName.startsWith("scala.") => true
-        case fullName if fullName.startsWith("java.")  => true
-        case _ => false
-      }
-    */
-
     expr match {
-      //case Select(_, _) => ??? //expr
-      //case TypeApply(_, _) => ??? //expr
       //case Ident(_) if skipIdent(expr.symbol) => expr
       case _ => // TG return just `expr` here prevents the crash
         val tapply = recordValueSel.appliedToType(expr.tpe)
@@ -96,7 +52,6 @@ class RecorderMacro(using qctx0: QuoteContext) {
     }
   }
 
-  //private[this] def getSourceCode(expr: Tree): String = ""
 }
 
 object RecorderMacro {
