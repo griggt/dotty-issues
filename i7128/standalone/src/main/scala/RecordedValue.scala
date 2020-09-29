@@ -1,0 +1,1 @@
+case class RecordedValue(value: Any, anchor: Int) {}
