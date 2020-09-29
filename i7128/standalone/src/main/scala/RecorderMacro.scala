@@ -1,27 +1,32 @@
 import scala.quoted._
 
-class RecorderMacro(using qctx0: QuoteContext) {
-  import qctx0.tasty.{ Type => _, _ }
+class Runtime {
+  def recordValue[U](value: U): U = ???
+}
+
+class RecorderMacro(using qctx: QuoteContext) {
+  import qctx.tasty.{ Type => _, _ }
   import util._
 
-  private[this] val runtimeSym: Symbol = '[RecorderRuntime[_, _]].unseal.tpe.typeSymbol
+  private[this] val runtimeSym: Symbol = '[Runtime].unseal.tpe.typeSymbol
 
-  def apply[A: Type, R: Type](recording: Expr[A]): Expr[R] = {
-    val termArg: Term = recording.unseal.underlyingArgument
+  def apply[A: Type, R: Type](x: Expr[A]): Expr[R] = {
+    val termArg: Term = x.unseal.underlyingArgument
 
     '{
-      val recorderRuntime: RecorderRuntime[A, R] = ???
+      val runtime: Runtime = ???
+      val completed: R = ???
       ${
         Block(
-          recordExpressions('{ recorderRuntime }.unseal, termArg),
-          '{ recorderRuntime.completeRecording() }.unseal
+          recordExpressions('{ runtime }.unseal, termArg),
+          '{ completed }.unseal
         ).seal.cast[R]
       }
     }
   }
 
   private def recordExpressions(runtime: Term, recording: Term): List[Term] = {
-    List(recordExpression(runtime, recording))
+    recordExpression(runtime, recording) :: Nil
   }
 
   private def recordExpression(runtime: Term, expr: Term): Term = {
@@ -47,7 +52,7 @@ class RecorderMacro(using qctx0: QuoteContext) {
       //case Ident(_) if skipIdent(expr.symbol) => expr
       case _ => // TG return just `expr` here prevents the crash
         val tapply = recordValueSel.appliedToType(expr.tpe)
-        Apply.copy(expr)(tapply, List(expr, Literal(Constant(0))))
+        Apply.copy(expr)(tapply, expr :: Nil)
     }
   }
 
