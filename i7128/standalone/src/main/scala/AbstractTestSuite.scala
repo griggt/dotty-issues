@@ -2,5 +2,5 @@
 
 //@platform.EnableReflectiveInstantiation
 trait AbstractTestSuite {
-  def properties: Properties[_]
+  //def properties: Properties[_]
 }
