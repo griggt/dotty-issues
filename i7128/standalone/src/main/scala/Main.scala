@@ -11,6 +11,7 @@ object Test extends Assertion {
 */
 
 
+
 object Test extends BasicTestSuite {
   test("") {
     def foo(x: T[Int]): Boolean = ???
