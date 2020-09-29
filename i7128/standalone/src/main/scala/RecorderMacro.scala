@@ -1,7 +1,7 @@
 import scala.quoted._
 
 class Runtime {
-  def recordValue[U](value: U): U = ???
+  def fooValue[U](u: U): U = ???
 }
 
 class RecorderMacro(using qctx: QuoteContext) {
@@ -12,55 +12,28 @@ class RecorderMacro(using qctx: QuoteContext) {
 
   def apply[A: Type, R: Type](x: Expr[A]): Expr[R] = {
     val termArg: Term = x.unseal.underlyingArgument
-
     '{
-      val runtime: Runtime = ???
+      val rt: Runtime = ???
       val completed: R = ???
-      ${
-        Block(
-          recordExpressions('{ runtime }.unseal, termArg),
-          '{ completed }.unseal
-        ).seal.cast[R]
-      }
+      ${Block(doExprs('{ rt }.unseal, termArg), '{ completed }.unseal).seal.cast[R]}
     }
   }
 
-  private def recordExpressions(runtime: Term, recording: Term): List[Term] = {
-    recordExpression(runtime, recording) :: Nil
+  private def doExprs(rt: Term, t: Term): List[Term] = doAllVals(rt, t) :: Nil
+  private def doAllVals(rt: Term, t: Term): Term = doVal(rt, doSubVals(rt, t))
+
+  private def doSubVals(rt: Term, t: Term): Term = t match {
+    case Apply(x, ys) => Apply(doAllVals(rt, x), ys.map(doAllVals(rt, _)))
+    case _            => t
   }
 
-  private def recordExpression(runtime: Term, expr: Term): Term = {
-    recordAllValues(runtime, expr)
+  private def doVal(rt: Term, t: Term): Term = {
+    val sel: Term = rt.select(runtimeSym.method("fooValue").head)
+    Apply.copy(t)(sel.appliedToType(t.tpe), t :: Nil)
   }
-
-  private def recordAllValues(runtime: Term, expr: Term): Term =
-    recordValue(runtime, recordSubValues(runtime, expr))
-
-  private def recordSubValues(runtime: Term, expr: Term): Term =
-    expr match {
-      case Apply(x, ys) => Apply(recordAllValues(runtime, x), ys.map(recordAllValues(runtime, _)))
-      case _            => expr
-    }
-
-  private def recordValue(runtime: Term, expr: Term): Term = {
-    val recordValueSel: Term = {
-      val m = runtimeSym.method("recordValue").head
-      runtime.select(m)
-    }
-
-    expr match {
-      //case Ident(_) if skipIdent(expr.symbol) => expr
-      case _ => // TG return just `expr` here prevents the crash
-        val tapply = recordValueSel.appliedToType(expr.tpe)
-        Apply.copy(expr)(tapply, expr :: Nil)
-    }
-  }
-
 }
 
 object RecorderMacro {
-  def apply[A: Type, R: Type](recording: Expr[A])(using QuoteContext): Expr[R] =
-    new RecorderMacro().apply(recording)
+  def apply[A: Type, R: Type](x: Expr[A])(using QuoteContext): Expr[R] =
+    new RecorderMacro().apply(x)
 }
-
-object StringRecorderMacro {}
