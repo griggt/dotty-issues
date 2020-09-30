@@ -5,18 +5,15 @@ class Runtime {
   def fooValue[U](u: U): U = ???
 }
 
-class RecorderMacro(using qctx: QuoteContext) {
+class Macro(using qctx: QuoteContext) {
   import qctx.tasty.{ Type => _, _ }
-  import util._
 
-  private[this] val runtimeSym: Symbol = '[Runtime].unseal.tpe.typeSymbol
-
-  def apply[A: Type, R: Type](x: Expr[A]): Expr[R] = {
+  def apply[A: Type](x: Expr[A]): Expr[Unit] = {
     val termArg: Term = x.unseal.underlyingArgument
     '{
       val rt: Runtime = ???
-      val completed: R = ???
-      ${Block(doExprs('{ rt }.unseal, termArg), '{ completed }.unseal).seal.cast[R]}
+      val completed: Unit = ???
+      ${Block(doExprs('{ rt }.unseal, termArg), '{ completed }.unseal).seal.cast[Unit]}
     }
   }
 
@@ -28,27 +25,24 @@ class RecorderMacro(using qctx: QuoteContext) {
     case _            => t
   }
 
+  private val runtimeSym: Symbol = '[Runtime].unseal.tpe.typeSymbol
+
   private def doVal(rt: Term, t: Term): Term = {
     val sel: Term = rt.select(runtimeSym.method("fooValue").head)
     Apply.copy(t)(sel.appliedToType(t.tpe), t :: Nil)
   }
 }
 
-object RecorderMacro {
-  def apply[A: Type, R: Type](x: Expr[A])(using QuoteContext): Expr[R] =
-    new RecorderMacro().apply(x)
+object Macro {
+  def apply[A: Type](x: Expr[A])(using QuoteContext): Expr[Unit] =
+    new Macro().apply(x)
 }
 
-abstract class Recorder[A, R] {
-  inline def apply(value: A): R = ${ RecorderMacro.apply('value) }
+abstract class Assert[A] {
+  inline def apply(value: A): Unit = ${ Macro.apply('value) }
 }
 
-class PowerAssert extends Recorder[Boolean, Unit]
-
-trait Assertion {
-  def assert: PowerAssert = ???
-}
-
-trait BasicTestSuite extends Assertion {
-  def test(name: String)(f: => Unit): Unit = ???
+trait TestSuite {
+  def assert: Assert[Boolean] = ???
+  def test(f: => Unit): Unit = ???
 }
