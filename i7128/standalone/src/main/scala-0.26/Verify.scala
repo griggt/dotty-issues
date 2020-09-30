@@ -12,12 +12,12 @@ class Macro(using qctx: QuoteContext) {
     val termArg: Term = x.unseal.underlyingArgument
     '{
       val rt: Runtime = ???
-      val completed: Unit = ???
-      ${Block(doExprs('{ rt }.unseal, termArg), '{ completed }.unseal).seal.cast[Unit]}
+      ${Block(doExprs('{ rt }.unseal, termArg), '{ () }.unseal).seal.cast[Unit]}
     }
   }
 
   private def doExprs(rt: Term, t: Term): List[Term] = doAllVals(rt, t) :: Nil
+
   private def doAllVals(rt: Term, t: Term): Term = doVal(rt, doSubVals(rt, t))
 
   private def doSubVals(rt: Term, t: Term): Term = t match {
@@ -27,9 +27,11 @@ class Macro(using qctx: QuoteContext) {
 
   private val runtimeSym: Symbol = '[Runtime].unseal.tpe.typeSymbol
 
-  private def doVal(rt: Term, t: Term): Term = {
-    val sel: Term = rt.select(runtimeSym.method("fooValue").head)
-    Apply.copy(t)(sel.appliedToType(t.tpe), t :: Nil)
+  private def doVal(rt: Term, t: Term): Term = t match {
+    case TypeApply(_, _) => t
+    case _ =>
+      val sel: Term = rt.select(runtimeSym.method("fooValue").head)
+      Apply.copy(t)(sel.appliedToType(t.tpe), t :: Nil)
   }
 }
 
@@ -38,7 +40,7 @@ object Macro {
     new Macro().apply(x)
 }
 
-abstract class Assert[A] {
+class Assert[A] {
   inline def apply(value: A): Unit = ${ Macro.apply('value) }
 }
 
