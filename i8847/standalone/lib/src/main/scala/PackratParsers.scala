@@ -1,7 +1,7 @@
-package i8847.lib
+package i8847
 
-trait PackratParsers /*extends Parsers*/ {
-  // The `private` modifier is needed
-  // The `case class` is needed
-  private case class H(val h: Int)
+trait P {
+  // The `private` modifier is needed, and `X` must be a case class or case object
+  // private case class X(x: Int)
+  private case object X
 }

@@ -1,3 +1,3 @@
-import i8847.lib.{PackratParsers, RegexParsers}
+import i8847.P
 
-class T extends RegexParsers with PackratParsers
+class T extends P
