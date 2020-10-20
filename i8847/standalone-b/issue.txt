@@ -1,0 +1,14 @@
+A related issue uncovered while bisecting the first issue.
+
+When compiling with 0.26.0-bin-SNAPSHOT-git-d7bea54, the following error occurs:
+
+$ dotc -classpath /home/tgrigg/.ivy2/local/io.grigg/i8847b-lib_2.13/1.0-SNAPSHOT/jars/i8847b-lib_2.13.jar src/main/scala/i8847.scala
+
+-- [E120] Naming Error: src/main/scala/i8847.scala:3:6 -------------------------
+3 |class C extends Bar with Baz
+  |      ^
+  |      Double definition:
+  |      private def super$foo(): Unit in class C and
+  |      private def super$foo(): Unit in class C
+  |      have the same type after erasure.
+1 error found
