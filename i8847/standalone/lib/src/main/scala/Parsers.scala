@@ -59,7 +59,7 @@ trait Parsers {
 
   def Parser[T](f: Input => ParseResult[T]): Parser[T] = ???
 
-  def OnceParser[T](f: Input => ParseResult[T]): Parser[T] with OnceParser[T] = ???
+//  def OnceParser[T](f: Input => ParseResult[T]): Parser[T] with OnceParser[T] = ???
 
   abstract class Parser[+T] extends (Input => ParseResult[T]) {
     private var name: String = ""
@@ -94,9 +94,5 @@ trait Parsers {
   def phrase[T](p: Parser[T]): Parser[T] = ???
   def mkList[T] = ???
 
-  case class ~[+a, +b](_1: a, _2: b) {
-    override def toString = ""
-  }
-
-  trait OnceParser[+T] extends Parser[T]
+//  trait OnceParser[+T] extends Parser[T]
 }
