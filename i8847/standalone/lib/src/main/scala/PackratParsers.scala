@@ -1,7 +1,7 @@
 package i8847.lib
 
-import scala.util.parsing.input.Position
-
-trait PackratParsers extends Parsers {
-  private case class Head(var headParser: Parser[_], var involvedSet: List[Parser[_]], var evalSet: List[Parser[_]])
+trait PackratParsers /*extends Parsers*/ {
+  // The `private` modifier is needed
+  // The `case class` is needed
+  private case class H(val h: Int)
 }
