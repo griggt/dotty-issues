@@ -8,7 +8,7 @@ trait RegexParsers extends Parsers {
 
   type Elem = Char
 
-  protected val whiteSpace = """\s+""".r
+  protected val whiteSpace = ""
 
   def skipWhitespace = ???
 
