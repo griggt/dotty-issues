@@ -1,0 +1,28 @@
+$ git bisect start --term-new fixed --term-old broken
+$ git bisect broken 0.25.0-RC2
+$ git bisect fixed 0.26.0-RC1
+
+** Error message changed w/ commit 4dbca90:  (from #9316 - odersky - harden avoidMap)
+
+-- Error: i8847.scala:5:83 -----------------------------------------------------
+5 |class TestParser  extends RegexParsers with ImplicitConversions with PackratParsers {
+  |                                                                                   ^
+    |wrong number of arguments at functionalInterfaces for (): PackratParsers.this.MemoEntry$: (PackratParsers.this.MemoEntry$#<init> : (): PackratParsers.this.MemoEntry$), expected: 0, found: 1
+
+** Same error message as above with 9e3da24  (not the cause)
+**          ""                  ""  e158644  (not the cause)
+
+** Yet another different error message from d495ee0:
+
+-- [E120] Naming Error: i8847.scala:5:6 ----------------------------------------
+5 |class TestParser  extends RegexParsers with ImplicitConversions with PackratParsers {
+  |      ^
+  |Double definition:
+  |private def super$phrase(p: Parsers.this.Parser): Parsers.this.Parser in class TestParser and
+  |private def super$phrase(p: Parsers.this.Parser): Parsers.this.Parser in class TestParser
+  |have the same type after erasure.
+
+** Same error message as above with d682455  (also in #8652)
+** Same error message as above with 288fa1d  (also in #8652; immediate predecessor of fixed commit)
+
+*** Fixed by 2eb743c  (sjrd - #8652)

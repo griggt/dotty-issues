@@ -1,0 +1,15 @@
+This is a Scala 2 compat issue.  Works fine using scala-parser-combinators
+compiled by dotty on 0.24.0-RC1.
+
+Fixed by:
+
+commit 2eb743c312c83156b5a45758cbb5d14af8cac579
+Author: Sébastien Doeraene <sjrdoeraene@gmail.com>
+Date:   Wed Jun 24 16:08:19 2020 +0200
+
+    Restore AugmentScala2Traits, but limit it to super accessors.
+
+ compiler/src/dotty/tools/dotc/Compiler.scala       |  2 +-
+ .../tools/dotc/transform/AugmentScala2Traits.scala | 25 +++++-----------------
+ .../dotty/tools/dotc/transform/ResolveSuper.scala  |  2 +-
+    3 files changed, 7 insertions(+), 22 deletions(-)
