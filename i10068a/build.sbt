@@ -11,5 +11,6 @@ lazy val root = project
     name := "dotty-simple",
     version := "0.1.0",
     scalaVersion := dottyVersion,
-    libraryDependencies += "dev.zio" %% "zio-prelude" % zioversion,
+    //libraryDependencies += "dev.zio" %% "zio-prelude" % zioversion,
+    libraryDependencies += "io.griggt" %% "zp2" % "0.1.0-SNAPSHOT"
   )
