@@ -1,8 +1,9 @@
 val dottyVersion = "0.27.0-RC1"
 //val zioversion = "1.0.0-RC1+23-6a9b7831+20201022-1437-SNAPSHOT"
 //val zioversion = "1.0.0-RC1+23-6a9b7831+20201022-1510-SNAPSHOT"
-val zioversion = "1.0.0-RC1+23-6a9b7831+20201022-1706-SNAPSHOT"
 
+val zioversion = "1.0.0-RC1+23-6a9b7831+20201022-1706-SNAPSHOT"
+//val zioversion = "1.0.0-RC1+24-ff300925+20201022-1835-SNAPSHOT"
 
 testFrameworks := Seq(new TestFramework("zio.test.sbt.ZTestFramework"))
 
