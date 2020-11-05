@@ -1,0 +1,130 @@
+The example the Allan Renucci gives works when tested with 3.0.0-M2-bin-SNAPSHOT-git-1ab76c1
+
+AR's pickling test fails on:
+  0.6.0-RC1
+  0.8.0-RC1
+  0.9.0-RC1
+
+Works on
+  0.10.0-RC1
+  0.13.0-RC1
+  3.0.0-M2 nightly
+
+5b91393 Fixed
+e307755 Broken
+
+Looks like PR #5138 fixed it.
+
+12862de2a73914f906d0284ea60537ddb9d0b17f is the first fixed commit
+commit 12862de2a73914f906d0284ea60537ddb9d0b17f
+Author: Martin Odersky <odersky@gmail.com>
+Date:   Wed Sep 26 08:37:23 2018 +0200
+
+    Drop implicit matches
+
+ .../src/dotty/tools/dotc/core/Definitions.scala    |  6 +---
+ .../src/dotty/tools/dotc/parsing/Parsers.scala     | 29 +------------------
+ compiler/src/dotty/tools/dotc/typer/Typer.scala    |  8 +-----
+ compiler/test/dotc/run-test-pickling.blacklist     |  1 -
+ docs/docs/internals/syntax.md                      |  9 ++----
+ tests/neg/implicitMatch-syntax.scala               | 33 ----------------------
+ 6 files changed, 6 insertions(+), 80 deletions(-)
+
+=====
+
+ZipArchive example:
+  maybe works in 0.15.0-RC1  (first fully bootstrapped dotty)
+  maybe works in 0.8.0-RC1 (dotty-bootstrapped/compile works with ZipArchive patch)
+  maybe works in 0.7.0-RC1 ( " )
+  0.5.0-RC1  - dotty-bootstrapped/compile does not reproduce the issue
+
+Need to figure out how to reproduce
+
+A: testOnly dotty.tools.dotc.CompilationTests -- *testPickling
+
+PR #3825 fails the pickling test
+
+fd7ba2b317 (in 0.5.0-RC1) fails pickling test, but only when parent directory of io is also included
+ (tools)
+0.6.0-RC1 fails the pickling test (non-bootstrapped)
+0.7.0-RC1 passes the pickling test (non-bootstrapped + bootstrapped)
+
+Looks like the ZipArchive example is fixed by PR #3410
+
+23b61fa9d9207bf6a41295ab8e70022ee25d8c9b is the first fixed commit
+commit 23b61fa9d9207bf6a41295ab8e70022ee25d8c9b
+Author: Nicolas Stucki <nicolas.stucki@gmail.com>
+Date:   Sun Feb 25 16:02:11 2018 +0100
+
+    Remove scala.Phantom
+
+ compiler/src/dotty/tools/dotc/ast/tpd.scala        |   1 -
+ .../src/dotty/tools/dotc/core/Definitions.scala    |  21 +--
+ compiler/src/dotty/tools/dotc/core/StdNames.scala  |   1 -
+ .../src/dotty/tools/dotc/core/SymDenotations.scala |   2 +-
+ .../src/dotty/tools/dotc/core/TypeComparer.scala   |  12 +-
+    ... elided, lots of files changed ...
+
+=======
+
+Setting the contents of compiler/src/dotty/tools/io/ directory aside and compiling with
+  dotc -Ytest-pickler -Ystop-after:pickler
+
+Broken in 4dc8b6c (which fixed the original minimized example)
+ and also 0.4.0-RC1
+Fixed in  23b61fa (as above)
+ and also bedbd5a (not as above; the parent of the merge commit for #3410)
+ and also 0.6.0-RC1
+ and also 0.5.0-RC1
+
+Fixed by #3421
+
+fd7ba2b317a501194d152a6e12e80b63b73c0dc1 is the first fixed commit
+commit fd7ba2b317a501194d152a6e12e80b63b73c0dc1
+Author: Martin Odersky <odersky@gmail.com>
+Date:   Wed Nov 1 10:56:22 2017 +0100
+
+    Fix #3396: Abort implicit search if result does not match
+
+    Don't proceed with implicit search if result type cannot match - the search
+    will likely by under-constrained, which means that an unbounded number of alternatives
+    is tried. See strawman-contrib MapDecoratorTest.scala for an example where this happens.
+
+ compiler/src/dotty/tools/dotc/typer/Typer.scala | 14 ++++++++++----
+ 1 file changed, 10 insertions(+), 4 deletions(-)
+
+========
+
+The standalone ZipArchive example fails during compilation using 0.1.2-RC1
+ (same error message as original issue #2340)
+
+Still broken in 0.2.0-RC1
+Still broken in 0.3.0-RC2
+Works with      0.4.0-RC1
+
+Seems to be fixed by PR #3202
+
+4dc8b6cd5e965c36bf91febd9def2e09ac5b77b2 is the first fixed commit
+commit 4dc8b6cd5e965c36bf91febd9def2e09ac5b77b2
+Author: Martin Odersky <odersky@gmail.com>
+Date:   Thu Sep 28 13:52:50 2017 +0200
+
+    Fix #3149: Fix pickling of child annotations to local classes
+
+    i3149.scala is an interesting test case: A sealed top-level class `Foo`
+    has a child which is a local (i.e., term-owned) definition in a different top-level class.
+    It is then impossible to establish a symbolic reference to the child class
+    from `Foo`, and it is also impossible to refer to `Foo` using a path. We deal with this
+    by avoiding pickling such child annotations and re-establishing the annotation
+    when the body of the child class is unpickled.
+
+ .../src/dotty/tools/dotc/core/Annotations.scala    | 27 +++++++++++++-----
+ .../dotc/core/classfile/ClassfileParser.scala      |  2 +-
+ .../dotty/tools/dotc/core/tasty/TreePickler.scala  | 13 ++++++++-
+ .../tools/dotc/core/tasty/TreeUnpickler.scala      |  6 +++-
+ .../dotc/core/unpickleScala2/Scala2Unpickler.scala |  2 +-
+ .../src/dotty/tools/dotc/transform/PostTyper.scala | 16 ++---------
+ .../src/dotty/tools/dotc/transform/SymUtils.scala  | 32 ++++++++++++++++++++++
+ compiler/src/dotty/tools/dotc/typer/Namer.scala    |  2 +-
+ 8 files changed, 75 insertions(+), 25 deletions(-)
+
