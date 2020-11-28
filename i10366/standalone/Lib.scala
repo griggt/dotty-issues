@@ -1,10 +1,7 @@
-import scala.quoted._
-
 trait Position
 
 object Position:
-  implicit inline def here: Position = ${ genPosition }
-  def genPosition(using Quotes): Expr[Position] = ???
+  implicit inline def here: Position = ???
 
 object Matchers:
   class AnyShouldWrapper[T](val lhs: T, val pos: Position):
