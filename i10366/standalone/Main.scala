@@ -1,10 +1,10 @@
 import scala.quoted._
 
-case class Position(fileName: String, lineNumber: Int)
+trait Position
 
 object Position:
   implicit inline def here: Position = ${ genPosition }
-  private def genPosition(using QuoteContext): Expr[Position] = ???
+  def genPosition(using Quotes): Expr[Position] = ???
 
 object Matchers:
   class AnyShouldWrapper[T](val lhs: T, val pos: Position):
