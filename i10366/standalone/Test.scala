@@ -1,6 +1,6 @@
 import scala.compiletime.testing._
-import should.Matchers._
 
-class Test {
-  def x = typeChecks("trait Foo") shouldBe true
+object Test {
+  import Matchers._
+  typeChecks("trait Foo") shouldBe true
 }
