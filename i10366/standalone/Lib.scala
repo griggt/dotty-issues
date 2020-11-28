@@ -1,13 +1,13 @@
 import scala.compiletime.testing._
 
-trait Position
+trait Foo
 
 object Test:
   class ShouldWrapper(lhs: Boolean):
     def shouldBe(rhs: Boolean): Unit = ???
 
-  implicit val here: Position = ???
-  implicit def convertToShouldWrapper(o: Boolean)(implicit pos: Position): ShouldWrapper = ???
+  implicit val foo: Foo = ???
+  implicit def convertToShouldWrapper(x: Boolean)(implicit f: Foo): ShouldWrapper = ???
 
   def test(): Unit =
-    typeChecks("class Foo") shouldBe true
+    typeChecks("class Bar") shouldBe true
