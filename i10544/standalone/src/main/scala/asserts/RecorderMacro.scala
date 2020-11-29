@@ -1,19 +1,22 @@
-package verify
-package asserts
-
+// Verify.scala
 import scala.quoted._
 
-class RecorderMacro(using Quotes) {
+class PowerAssert:
+  inline def apply(value: Boolean): Unit = ${ Macro.apply('value) }
+
+object PowerAssert:
+  def assert: PowerAssert = ???
+
+class Runtime:
+  def recordValue[U](value: U): U = ???
+
+class Macro(using Quotes):
   import quotes.reflect._
-  import util._
 
-  private[this] val runtimeSym: Symbol = TypeRepr.of[RecorderRuntime[_]].typeSymbol
-
-  def apply[A: Type](recording: Expr[A]): Expr[Unit] = {
-    val termArg: Term = Term.of(recording).underlyingArgument
-
+  def apply[A: Type](x: Expr[A]): Expr[Unit] =
+    val termArg: Term = Term.of(x).underlyingArgument
     '{
-      val runtime: RecorderRuntime[A] = ???
+      val runtime: Runtime = ???
       ${
         Block(
           recordExpressions(Term.of('{ runtime }), termArg),
@@ -21,71 +24,49 @@ class RecorderMacro(using Quotes) {
         ).asExprOf[Unit]
       }
     }
-  }
 
-  private[this] def recordExpressions(runtime: Term, recording: Term): List[Term] =
+  private def recordExpressions(runtime: Term, recording: Term): List[Term] =
     recordExpression(runtime, recording) :: Nil
 
-  private[this] def recordExpression(runtime: Term, expr: Term): Term =
+  private def recordExpression(runtime: Term, expr: Term): Term =
     recordAllValues(runtime, expr)
 
-  private[this] def recordAllValues(runtime: Term, expr: Term): Term =
-    expr match {
+  private def recordAllValues(runtime: Term, expr: Term): Term =
+    expr match
       case New(_)     => expr
       case Literal(_) => expr
       case Select(x@This(_), y) if expr.pos.start == x.pos.start => expr
       case Typed(r @ Repeated(xs, y), tpe) => Typed.copy(r)(recordSubValues(runtime, r), tpe)
       case _ => recordValue(runtime, recordSubValues(runtime, expr), expr)
-    }
 
-  private[this] def recordSubValues(runtime: Term, expr: Term): Term =
-    expr match {
+  private def recordSubValues(runtime: Term, expr: Term): Term =
+    expr match
       case Apply(x, ys) =>
-        try {
-          Apply(recordAllValues(runtime, x), ys.map(recordAllValues(runtime, _)))
-        } catch {
-          case e: AssertionError => expr
-        }
+        try Apply(recordAllValues(runtime, x), ys.map(recordAllValues(runtime, _)))
+        catch case e: AssertionError => expr
       case TypeApply(x, ys) => TypeApply.copy(expr)(recordSubValues(runtime, x), ys)
       case Select(x, y)     => Select.copy(expr)(recordAllValues(runtime, x), y)
       case Typed(x, tpe)    => Typed.copy(expr)(recordSubValues(runtime, x), tpe)
       case Repeated(xs, y)  => Repeated.copy(expr)(xs.map(recordAllValues(runtime, _)), y)
       case _                => expr
-    }
 
-  private[this] def recordValue(runtime: Term, expr: Term, origExpr: Term): Term = {
-    val recordValueSel: Term = {
-      val m = runtimeSym.method("recordValue").head
-      runtime.select(m)
-    }
-    def skipIdent(sym: Symbol): Boolean =
-      sym.fullName match {
-        case "scala" | "java" => true
-        case fullName if fullName.startsWith("scala.") => true
-        case fullName if fullName.startsWith("java.")  => true
-        case _ => false
-      }
+  private val runtimeSym: Symbol = TypeRepr.of[Runtime].typeSymbol
 
-    def skipSelect(sym: Symbol): Boolean = {
-      (sym match {
-        case sym if sym.isDefDef => sym.signature.paramSigs.nonEmpty
-        case sym if sym.isValDef => skipIdent(sym)
-        case _ => true
-      })
+  private def recordValue(runtime: Term, expr: Term, origExpr: Term): Term =
+    val sel: Term = runtime.select(runtimeSym.method("recordValue").head)
 
-    }
-    expr match {
-      case Select(_, _) if skipSelect(expr.symbol) => expr
+    def skipIdent(sym: Symbol): Boolean = false
+    def skipSelect(sym: Symbol): Boolean = true
+
+    expr match
       case TypeApply(_, _) => expr
       case Ident(_) if skipIdent(expr.symbol) => expr
+      case Select(_, _) if skipSelect(expr.symbol) => expr
       case _ =>
-        val tapply = recordValueSel.appliedToType(expr.tpe)
+        val tapply = sel.appliedToType(expr.tpe)
         Apply.copy(expr)(tapply, List(expr))
-    }
-  }
-}
+end Macro
 
-object RecorderMacro {
-  def apply[A: Type](recording: Expr[A])(using Quotes): Expr[Unit] =
-    new RecorderMacro().apply(recording)
-}
+object Macro:
+  def apply[A: Type](x: Expr[A])(using Quotes): Expr[Unit] =
+    new Macro().apply(x)
