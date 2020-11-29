@@ -1,0 +1,573 @@
+[info] welcome to sbt 1.4.4 (Debian Java 11.0.8)
+[info] loading global plugins from /home/tgrigg/.sbt/1.0/plugins
+[info] loading settings for project standalone-build-build-build from metals.sbt ...
+[info] loading project definition from /src/dotty-issues/i10544/standalone/project/project/project
+[info] loading settings for project standalone-build-build from metals.sbt ...
+[info] loading project definition from /src/dotty-issues/i10544/standalone/project/project
+[success] Generated .bloop/standalone-build-build.json
+[success] Total time: 0 s, completed Nov 29, 2020, 3:17:10 PM
+[info] loading settings for project standalone-build from metals.sbt,plugins.sbt ...
+[info] loading project definition from /src/dotty-issues/i10544/standalone/project
+[success] Generated .bloop/standalone-build.json
+[success] Total time: 0 s, completed Nov 29, 2020, 3:17:10 PM
+[info] loading settings for project standalone from build.sbt ...
+[info] set current project to standalone (in build file:/src/dotty-issues/i10544/standalone/)
+[info] compiling 1 Scala source to /src/dotty-issues/i10544/standalone/target/scala-3.0.0-M2/test-classes ...
+error while abstracting tree = Test.foo | mt = (x: Int): String | args =  | tp = String | pt = Object
+exception while typing runtime.recordValue[(Test.foo : (x: Int): String)](Test.foo) of class class dotty.tools.dotc.ast.Trees$Apply # -1
+exception while typing runtime.recordValue[(Test.foo : (x: Int): String)](Test.foo)(0) of class class dotty.tools.dotc.ast.Trees$Apply # -1
+exception while typing runtime.recordValue[String](
+  runtime.recordValue[(Test.foo : (x: Int): String)](Test.foo)(0)
+) of class class dotty.tools.dotc.ast.Trees$Apply # -1
+exception while typing runtime.recordValue[String](
+  runtime.recordValue[(Test.foo : (x: Int): String)](Test.foo)(0)
+).== of class class dotty.tools.dotc.ast.Trees$Select # -1
+exception while typing runtime.recordValue[String](
+  runtime.recordValue[(Test.foo : (x: Int): String)](Test.foo)(0)
+).==("foo") of class class dotty.tools.dotc.ast.Trees$Apply # -1
+exception while typing runtime.recordValue[Boolean](
+  runtime.recordValue[String](
+    runtime.recordValue[(Test.foo : (x: Int): String)](Test.foo)(0)
+  ).==("foo")
+) of class class dotty.tools.dotc.ast.Trees$Apply # -1
+exception while typing {
+  runtime.recordValue[Boolean](
+    runtime.recordValue[String](
+      runtime.recordValue[(Test.foo : (x: Int): String)](Test.foo)(0)
+    ).==("foo")
+  )
+  ()
+} of class class dotty.tools.dotc.ast.Trees$Block # -1
+exception while typing {
+  runtime.recordValue[Boolean](
+    runtime.recordValue[String](
+      runtime.recordValue[(Test.foo : (x: Int): String)](Test.foo)(0)
+    ).==("foo")
+  )
+  ()
+} of class class dotty.tools.dotc.ast.Trees$Inlined # -1
+exception while typing {
+  val runtime: Runtime = ???
+  {
+    runtime.recordValue[Boolean](
+      runtime.recordValue[String](
+        runtime.recordValue[(Test.foo : (x: Int): String)](Test.foo)(0)
+      ).==("foo")
+    )
+    ()
+  }
+} of class class dotty.tools.dotc.ast.Trees$Block # -1
+exception while typing {
+  val runtime: Runtime = ???
+  {
+    runtime.recordValue[Boolean](
+      runtime.recordValue[String](
+        runtime.recordValue[(Test.foo : (x: Int): String)](Test.foo)(0)
+      ).==("foo")
+    )
+    ()
+  }
+} of class class dotty.tools.dotc.ast.Trees$Inlined # -1
+exception while typing {
+  val runtime: Runtime = ???
+  {
+    runtime.recordValue[Boolean](
+      runtime.recordValue[String](
+        runtime.recordValue[(Test.foo : (x: Int): String)](Test.foo)(0)
+      ).==("foo")
+    )
+    ()
+  }
+}:Unit of class class dotty.tools.dotc.ast.Trees$Typed # -1
+exception while typing {
+  val value$proxy1: Boolean = Test.foo(0).==("foo")
+  val PowerAssert_this: PowerAssert = PowerAssert.assert
+  {
+    val runtime: Runtime = ???
+    {
+      runtime.recordValue[Boolean](
+        runtime.recordValue[String](
+          runtime.recordValue[(Test.foo : (x: Int): String)](Test.foo)(0)
+        ).==("foo")
+      )
+      ()
+    }
+  }:Unit
+} of class class dotty.tools.dotc.ast.Trees$Inlined # -1
+exception while typing def bar(): Unit = 
+  {
+    val value$proxy1: Boolean = Test.foo(0).==("foo")
+    val PowerAssert_this: PowerAssert = PowerAssert.assert
+    {
+      val runtime: Runtime = ???
+      {
+        runtime.recordValue[Boolean](
+          runtime.recordValue[String](
+            runtime.recordValue[(Test.foo : (x: Int): String)](Test.foo)(0)
+          ).==("foo")
+        )
+        ()
+      }
+    }:Unit
+  } of class class dotty.tools.dotc.ast.Trees$DefDef # -1
+exception while typing @scala.annotation.internal.SourceFile("src/test/scala/Test.scala") final module 
+  class
+ Test$() extends Object() {
+  private def writeReplace(): AnyRef = 
+    new scala.runtime.ModuleSerializationProxy(classOf[Test.type])
+  def foo(x: Int): String = "foo"
+  def bar(): Unit = 
+    {
+      val value$proxy1: Boolean = Test.foo(0).==("foo")
+      val PowerAssert_this: PowerAssert = PowerAssert.assert
+      {
+        val runtime: Runtime = ???
+        {
+          runtime.recordValue[Boolean](
+            runtime.recordValue[String](
+              runtime.recordValue[(Test.foo : (x: Int): String)](Test.foo)(0)
+            ).==("foo")
+          )
+          ()
+        }
+      }:Unit
+    }
+} of class class dotty.tools.dotc.ast.Trees$TypeDef # -1
+exception while typing package <empty> {
+  final lazy module val Test: Test$ = new Test$()
+  @scala.annotation.internal.SourceFile("src/test/scala/Test.scala") final 
+    module
+   class Test$() extends Object() {
+    private def writeReplace(): AnyRef = 
+      new scala.runtime.ModuleSerializationProxy(classOf[Test.type])
+    def foo(x: Int): String = "foo"
+    def bar(): Unit = 
+      {
+        val value$proxy1: Boolean = Test.foo(0).==("foo")
+        val PowerAssert_this: PowerAssert = PowerAssert.assert
+        {
+          val runtime: Runtime = ???
+          {
+            runtime.recordValue[Boolean](
+              runtime.recordValue[String](
+                runtime.recordValue[(Test.foo : (x: Int): String)](Test.foo)(0)
+              ).==("foo")
+            )
+            ()
+          }
+        }:Unit
+      }
+  }
+} of class class dotty.tools.dotc.ast.Trees$PackageDef # -1
+[info] exception occurred while compiling /src/dotty-issues/i10544/standalone/src/test/scala/Test.scala
+scala.MatchError: TypeRef(TermRef(ThisType(TypeRef(NoPrefix,module class scala)),module Predef),type String) (of class dotty.tools.dotc.core.Types$CachedTypeRef) while compiling /src/dotty-issues/i10544/standalone/src/test/scala/Test.scala
+[error] ## Exception when compiling 1 sources to /src/dotty-issues/i10544/standalone/target/scala-3.0.0-M2/test-classes
+[error] scala.MatchError: TypeRef(TermRef(ThisType(TypeRef(NoPrefix,module class scala)),module Predef),type String) (of class dotty.tools.dotc.core.Types$CachedTypeRef)
+[error] dotty.tools.dotc.transform.Erasure$Boxing$.abstracted$1(Erasure.scala:490)
+[error] dotty.tools.dotc.transform.Erasure$Boxing$.etaExpand(Erasure.scala:521)
+[error] dotty.tools.dotc.transform.Erasure$Boxing$.adaptToType(Erasure.scala:355)
+[error] dotty.tools.dotc.transform.Erasure$Typer.adapt(Erasure.scala:996)
+[error] dotty.tools.dotc.typer.Typer.typed(Typer.scala:2601)
+[error] dotty.tools.dotc.typer.Typer.typed(Typer.scala:2605)
+[error] dotty.tools.dotc.typer.Typer.typedExpr(Typer.scala:2720)
+[error] dotty.tools.dotc.transform.Erasure$Typer.$anonfun$4(Erasure.scala:792)
+[error] dotty.tools.dotc.core.Decorators$ListDecorator$.zipWithConserve$extension(Decorators.scala:149)
+[error] dotty.tools.dotc.transform.Erasure$Typer.typedApply(Erasure.scala:792)
+[error] dotty.tools.dotc.typer.Typer.typedUnnamed$1(Typer.scala:2471)
+[error] dotty.tools.dotc.typer.Typer.typedUnadapted(Typer.scala:2532)
+[error] dotty.tools.dotc.typer.ReTyper.typedUnadapted(ReTyper.scala:125)
+[error] dotty.tools.dotc.typer.Typer.typed(Typer.scala:2601)
+[error] dotty.tools.dotc.typer.Typer.typed(Typer.scala:2605)
+[error] dotty.tools.dotc.typer.Typer.typedExpr(Typer.scala:2720)
+[error] dotty.tools.dotc.transform.Erasure$Typer.typedApply(Erasure.scala:779)
+[error] dotty.tools.dotc.typer.Typer.typedUnnamed$1(Typer.scala:2471)
+[error] dotty.tools.dotc.typer.Typer.typedUnadapted(Typer.scala:2532)
+[error] dotty.tools.dotc.typer.ReTyper.typedUnadapted(ReTyper.scala:125)
+[error] dotty.tools.dotc.typer.Typer.typed(Typer.scala:2601)
+[error] dotty.tools.dotc.typer.Typer.typed(Typer.scala:2605)
+[error] dotty.tools.dotc.typer.Typer.typedExpr(Typer.scala:2720)
+[error] dotty.tools.dotc.transform.Erasure$Typer.$anonfun$4(Erasure.scala:792)
+[error] dotty.tools.dotc.core.Decorators$ListDecorator$.zipWithConserve$extension(Decorators.scala:149)
+[error] dotty.tools.dotc.transform.Erasure$Typer.typedApply(Erasure.scala:792)
+[error] dotty.tools.dotc.typer.Typer.typedUnnamed$1(Typer.scala:2471)
+[error] dotty.tools.dotc.typer.Typer.typedUnadapted(Typer.scala:2532)
+[error] dotty.tools.dotc.typer.ReTyper.typedUnadapted(ReTyper.scala:125)
+[error] dotty.tools.dotc.typer.Typer.typed(Typer.scala:2601)
+[error] dotty.tools.dotc.typer.Typer.typed(Typer.scala:2605)
+[error] dotty.tools.dotc.transform.Erasure$Typer.typedSelect(Erasure.scala:638)
+[error] dotty.tools.dotc.typer.Typer.typedNamed$1(Typer.scala:2441)
+[error] dotty.tools.dotc.typer.Typer.typedUnadapted(Typer.scala:2531)
+[error] dotty.tools.dotc.typer.ReTyper.typedUnadapted(ReTyper.scala:125)
+[error] dotty.tools.dotc.typer.Typer.typed(Typer.scala:2601)
+[error] dotty.tools.dotc.typer.Typer.typed(Typer.scala:2605)
+[error] dotty.tools.dotc.typer.Typer.typedExpr(Typer.scala:2720)
+[error] dotty.tools.dotc.transform.Erasure$Typer.typedApply(Erasure.scala:779)
+[error] dotty.tools.dotc.typer.Typer.typedUnnamed$1(Typer.scala:2471)
+[error] dotty.tools.dotc.typer.Typer.typedUnadapted(Typer.scala:2532)
+[error] dotty.tools.dotc.typer.ReTyper.typedUnadapted(ReTyper.scala:125)
+[error] dotty.tools.dotc.typer.Typer.typed(Typer.scala:2601)
+[error] dotty.tools.dotc.typer.Typer.typed(Typer.scala:2605)
+[error] dotty.tools.dotc.typer.Typer.typedExpr(Typer.scala:2720)
+[error] dotty.tools.dotc.transform.Erasure$Typer.$anonfun$4(Erasure.scala:792)
+[error] dotty.tools.dotc.core.Decorators$ListDecorator$.zipWithConserve$extension(Decorators.scala:149)
+[error] dotty.tools.dotc.transform.Erasure$Typer.typedApply(Erasure.scala:792)
+[error] dotty.tools.dotc.typer.Typer.typedUnnamed$1(Typer.scala:2471)
+[error] dotty.tools.dotc.typer.Typer.typedUnadapted(Typer.scala:2532)
+[error] dotty.tools.dotc.typer.ReTyper.typedUnadapted(ReTyper.scala:125)
+[error] dotty.tools.dotc.typer.Typer.typed(Typer.scala:2601)
+[error] dotty.tools.dotc.typer.Typer.typed(Typer.scala:2605)
+[error] dotty.tools.dotc.typer.Typer.traverse$1(Typer.scala:2653)
+[error] dotty.tools.dotc.typer.Typer.typedStats(Typer.scala:2676)
+[error] dotty.tools.dotc.transform.Erasure$Typer.typedStats(Erasure.scala:984)
+[error] dotty.tools.dotc.typer.Typer.typedBlockStats(Typer.scala:898)
+[error] dotty.tools.dotc.typer.Typer.typedBlock(Typer.scala:902)
+[error] dotty.tools.dotc.typer.Typer.typedUnnamed$1(Typer.scala:2479)
+[error] dotty.tools.dotc.typer.Typer.typedUnadapted(Typer.scala:2532)
+[error] dotty.tools.dotc.typer.ReTyper.typedUnadapted(ReTyper.scala:125)
+[error] dotty.tools.dotc.typer.Typer.typed(Typer.scala:2601)
+[error] dotty.tools.dotc.typer.Typer.typed(Typer.scala:2598)
+[error] dotty.tools.dotc.typer.Typer.typed(Typer.scala:2605)
+[error] dotty.tools.dotc.typer.Typer.typedInlined(Typer.scala:1631)
+[error] dotty.tools.dotc.transform.Erasure$Typer.typedInlined(Erasure.scala:841)
+[error] dotty.tools.dotc.typer.Typer.typedUnnamed$1(Typer.scala:2492)
+[error] dotty.tools.dotc.typer.Typer.typedUnadapted(Typer.scala:2532)
+[error] dotty.tools.dotc.typer.ReTyper.typedUnadapted(ReTyper.scala:125)
+[error] dotty.tools.dotc.typer.Typer.typed(Typer.scala:2601)
+[error] dotty.tools.dotc.typer.Typer.typed(Typer.scala:2605)
+[error] dotty.tools.dotc.typer.Typer.typedExpr(Typer.scala:2720)
+[error] dotty.tools.dotc.typer.Typer.typedBlock(Typer.scala:904)
+[error] dotty.tools.dotc.typer.Typer.typedUnnamed$1(Typer.scala:2479)
+[error] dotty.tools.dotc.typer.Typer.typedUnadapted(Typer.scala:2532)
+[error] dotty.tools.dotc.typer.ReTyper.typedUnadapted(ReTyper.scala:125)
+[error] dotty.tools.dotc.typer.Typer.typed(Typer.scala:2601)
+[error] dotty.tools.dotc.typer.Typer.typed(Typer.scala:2605)
+[error] dotty.tools.dotc.typer.Typer.typedInlined(Typer.scala:1631)
+[error] dotty.tools.dotc.transform.Erasure$Typer.typedInlined(Erasure.scala:841)
+[error] dotty.tools.dotc.typer.Typer.typedUnnamed$1(Typer.scala:2492)
+[error] dotty.tools.dotc.typer.Typer.typedUnadapted(Typer.scala:2532)
+[error] dotty.tools.dotc.typer.ReTyper.typedUnadapted(ReTyper.scala:125)
+[error] dotty.tools.dotc.typer.Typer.typed(Typer.scala:2601)
+[error] dotty.tools.dotc.typer.Typer.typed(Typer.scala:2605)
+[error] dotty.tools.dotc.transform.Erasure$Typer.typedTyped(Erasure.scala:594)
+[error] dotty.tools.dotc.typer.Typer.typedUnnamed$1(Typer.scala:2476)
+[error] dotty.tools.dotc.typer.Typer.typedUnadapted(Typer.scala:2532)
+[error] dotty.tools.dotc.typer.ReTyper.typedUnadapted(ReTyper.scala:125)
+[error] dotty.tools.dotc.typer.Typer.typed(Typer.scala:2601)
+[error] dotty.tools.dotc.typer.Typer.typed(Typer.scala:2598)
+[error] dotty.tools.dotc.typer.Typer.typed(Typer.scala:2605)
+[error] dotty.tools.dotc.typer.Typer.typedInlined(Typer.scala:1631)
+[error] dotty.tools.dotc.transform.Erasure$Typer.typedInlined(Erasure.scala:841)
+[error] dotty.tools.dotc.typer.Typer.typedUnnamed$1(Typer.scala:2492)
+[error] dotty.tools.dotc.typer.Typer.typedUnadapted(Typer.scala:2532)
+[error] dotty.tools.dotc.typer.ReTyper.typedUnadapted(ReTyper.scala:125)
+[error] dotty.tools.dotc.typer.Typer.typed(Typer.scala:2601)
+[error] dotty.tools.dotc.typer.Typer.typed(Typer.scala:2605)
+[error] dotty.tools.dotc.typer.Typer.typedExpr(Typer.scala:2720)
+[error] dotty.tools.dotc.typer.Typer.$anonfun$33(Typer.scala:1987)
+[error] dotty.tools.dotc.typer.PrepareInlineable$.dropInlineIfError(PrepareInlineable.scala:216)
+[error] dotty.tools.dotc.typer.Typer.typedDefDef(Typer.scala:1987)
+[error] dotty.tools.dotc.transform.Erasure$Typer.typedDefDef(Erasure.scala:893)
+[error] dotty.tools.dotc.typer.Typer.typedNamed$1(Typer.scala:2448)
+[error] dotty.tools.dotc.typer.Typer.typedUnadapted(Typer.scala:2531)
+[error] dotty.tools.dotc.typer.ReTyper.typedUnadapted(ReTyper.scala:125)
+[error] dotty.tools.dotc.typer.Typer.typed(Typer.scala:2601)
+[error] dotty.tools.dotc.typer.Typer.typed(Typer.scala:2605)
+[error] dotty.tools.dotc.typer.Typer.traverse$1(Typer.scala:2627)
+[error] dotty.tools.dotc.typer.Typer.typedStats(Typer.scala:2676)
+[error] dotty.tools.dotc.transform.Erasure$Typer.typedStats(Erasure.scala:984)
+[error] dotty.tools.dotc.typer.Typer.typedClassDef(Typer.scala:2131)
+[error] dotty.tools.dotc.typer.Typer.typedTypeOrClassDef$2(Typer.scala:2459)
+[error] dotty.tools.dotc.typer.Typer.typedNamed$1(Typer.scala:2463)
+[error] dotty.tools.dotc.typer.Typer.typedUnadapted(Typer.scala:2531)
+[error] dotty.tools.dotc.typer.ReTyper.typedUnadapted(ReTyper.scala:125)
+[error] dotty.tools.dotc.typer.Typer.typed(Typer.scala:2601)
+[error] dotty.tools.dotc.typer.Typer.typed(Typer.scala:2605)
+[error] dotty.tools.dotc.typer.Typer.traverse$1(Typer.scala:2627)
+[error] dotty.tools.dotc.typer.Typer.typedStats(Typer.scala:2676)
+[error] dotty.tools.dotc.transform.Erasure$Typer.typedStats(Erasure.scala:984)
+[error] dotty.tools.dotc.typer.Typer.typedPackageDef(Typer.scala:2256)
+[error] dotty.tools.dotc.typer.Typer.typedUnnamed$1(Typer.scala:2503)
+[error] dotty.tools.dotc.typer.Typer.typedUnadapted(Typer.scala:2532)
+[error] dotty.tools.dotc.typer.ReTyper.typedUnadapted(ReTyper.scala:125)
+[error] dotty.tools.dotc.typer.Typer.typed(Typer.scala:2601)
+[error] dotty.tools.dotc.typer.Typer.typed(Typer.scala:2605)
+[error] dotty.tools.dotc.typer.Typer.typedExpr(Typer.scala:2720)
+[error] dotty.tools.dotc.transform.Erasure.run(Erasure.scala:123)
+[error] dotty.tools.dotc.core.Phases$Phase.runOn$$anonfun$1(Phases.scala:296)
+[error] scala.collection.immutable.List.map(List.scala:246)
+[error] dotty.tools.dotc.core.Phases$Phase.runOn(Phases.scala:297)
+[error] dotty.tools.dotc.Run.runPhases$4$$anonfun$4(Run.scala:185)
+[error] dotty.runtime.function.JProcedure1.apply(JProcedure1.java:15)
+[error] dotty.runtime.function.JProcedure1.apply(JProcedure1.java:10)
+[error] scala.collection.ArrayOps$.foreach$extension(ArrayOps.scala:1323)
+[error] dotty.tools.dotc.Run.runPhases$5(Run.scala:195)
+[error] dotty.tools.dotc.Run.compileUnits$$anonfun$1(Run.scala:203)
+[error] dotty.runtime.function.JFunction0$mcV$sp.apply(JFunction0$mcV$sp.java:12)
+[error] dotty.tools.dotc.util.Stats$.maybeMonitored(Stats.scala:67)
+[error] dotty.tools.dotc.Run.compileUnits(Run.scala:210)
+[error] dotty.tools.dotc.Run.compileSources(Run.scala:147)
+[error] dotty.tools.dotc.Run.compile(Run.scala:129)
+[error] dotty.tools.dotc.Driver.doCompile(Driver.scala:38)
+[error] dotty.tools.dotc.Driver.process(Driver.scala:193)
+[error] dotty.tools.dotc.Main.process(Main.scala)
+[error] xsbt.CachedCompilerImpl.run(CachedCompilerImpl.java:69)
+[error] xsbt.CompilerInterface.run(CompilerInterface.java:41)
+[error] java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+[error] java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+[error] java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+[error] java.base/java.lang.reflect.Method.invoke(Method.java:566)
+[error] sbt.internal.inc.AnalyzingCompiler.invoke(AnalyzingCompiler.scala:330)
+[error] sbt.internal.inc.AnalyzingCompiler.compile(AnalyzingCompiler.scala:113)
+[error] sbt.internal.inc.MixedAnalyzingCompiler.$anonfun$compile$7(MixedAnalyzingCompiler.scala:186)
+[error] scala.runtime.java8.JFunction0$mcV$sp.apply(JFunction0$mcV$sp.java:23)
+[error] sbt.internal.inc.MixedAnalyzingCompiler.timed(MixedAnalyzingCompiler.scala:241)
+[error] sbt.internal.inc.MixedAnalyzingCompiler.$anonfun$compile$4(MixedAnalyzingCompiler.scala:176)
+[error] sbt.internal.inc.MixedAnalyzingCompiler.$anonfun$compile$4$adapted(MixedAnalyzingCompiler.scala:157)
+[error] sbt.internal.inc.JarUtils$.withPreviousJar(JarUtils.scala:239)
+[error] sbt.internal.inc.MixedAnalyzingCompiler.compileScala$1(MixedAnalyzingCompiler.scala:157)
+[error] sbt.internal.inc.MixedAnalyzingCompiler.compile(MixedAnalyzingCompiler.scala:204)
+[error] sbt.internal.inc.IncrementalCompilerImpl.$anonfun$compileInternal$1(IncrementalCompilerImpl.scala:573)
+[error] sbt.internal.inc.IncrementalCompilerImpl.$anonfun$compileInternal$1$adapted(IncrementalCompilerImpl.scala:573)
+[error] sbt.internal.inc.Incremental$.$anonfun$apply$5(Incremental.scala:173)
+[error] sbt.internal.inc.Incremental$.$anonfun$apply$5$adapted(Incremental.scala:171)
+[error] sbt.internal.inc.Incremental$$anon$2.run(Incremental.scala:458)
+[error] sbt.internal.inc.IncrementalCommon$CycleState.next(IncrementalCommon.scala:116)
+[error] sbt.internal.inc.IncrementalCommon$$anon$1.next(IncrementalCommon.scala:56)
+[error] sbt.internal.inc.IncrementalCommon$$anon$1.next(IncrementalCommon.scala:52)
+[error] sbt.internal.inc.IncrementalCommon.cycle(IncrementalCommon.scala:261)
+[error] sbt.internal.inc.Incremental$.$anonfun$incrementalCompile$8(Incremental.scala:413)
+[error] sbt.internal.inc.Incremental$.withClassfileManager(Incremental.scala:498)
+[error] sbt.internal.inc.Incremental$.incrementalCompile(Incremental.scala:400)
+[error] sbt.internal.inc.Incremental$.apply(Incremental.scala:165)
+[error] sbt.internal.inc.IncrementalCompilerImpl.compileInternal(IncrementalCompilerImpl.scala:573)
+[error] sbt.internal.inc.IncrementalCompilerImpl.$anonfun$compileIncrementally$1(IncrementalCompilerImpl.scala:491)
+[error] sbt.internal.inc.IncrementalCompilerImpl.handleCompilationError(IncrementalCompilerImpl.scala:332)
+[error] sbt.internal.inc.IncrementalCompilerImpl.compileIncrementally(IncrementalCompilerImpl.scala:420)
+[error] sbt.internal.inc.IncrementalCompilerImpl.compile(IncrementalCompilerImpl.scala:137)
+[error] sbt.Defaults$.compileIncrementalTaskImpl(Defaults.scala:2176)
+[error] sbt.Defaults$.$anonfun$compileIncrementalTask$2(Defaults.scala:2133)
+[error] sbt.internal.io.Retry$.apply(Retry.scala:40)
+[error] sbt.internal.io.Retry$.apply(Retry.scala:23)
+[error] sbt.internal.server.BspCompileTask$.compute(BspCompileTask.scala:31)
+[error] sbt.Defaults$.$anonfun$compileIncrementalTask$1(Defaults.scala:2129)
+[error] scala.Function1.$anonfun$compose$1(Function1.scala:49)
+[error] sbt.internal.util.$tilde$greater.$anonfun$$u2219$1(TypeFunctions.scala:62)
+[error] sbt.std.Transform$$anon$4.work(Transform.scala:68)
+[error] sbt.Execute.$anonfun$submit$2(Execute.scala:282)
+[error] sbt.internal.util.ErrorHandling$.wideConvert(ErrorHandling.scala:23)
+[error] sbt.Execute.work(Execute.scala:291)
+[error] sbt.Execute.$anonfun$submit$1(Execute.scala:282)
+[error] sbt.ConcurrentRestrictions$$anon$4.$anonfun$submitValid$1(ConcurrentRestrictions.scala:265)
+[error] sbt.CompletionService$$anon$2.call(CompletionService.scala:64)
+[error] java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+[error] java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:515)
+[error] java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+[error] java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1128)
+[error] java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628)
+[error] java.base/java.lang.Thread.run(Thread.java:834)
+[error]            
+[error] scala.MatchError: TypeRef(TermRef(ThisType(TypeRef(NoPrefix,module class scala)),module Predef),type String) (of class dotty.tools.dotc.core.Types$CachedTypeRef)
+[error] 	at dotty.tools.dotc.transform.Erasure$Boxing$.abstracted$1(Erasure.scala:490)
+[error] 	at dotty.tools.dotc.transform.Erasure$Boxing$.etaExpand(Erasure.scala:521)
+[error] 	at dotty.tools.dotc.transform.Erasure$Boxing$.adaptToType(Erasure.scala:355)
+[error] 	at dotty.tools.dotc.transform.Erasure$Typer.adapt(Erasure.scala:996)
+[error] 	at dotty.tools.dotc.typer.Typer.typed(Typer.scala:2601)
+[error] 	at dotty.tools.dotc.typer.Typer.typed(Typer.scala:2605)
+[error] 	at dotty.tools.dotc.typer.Typer.typedExpr(Typer.scala:2720)
+[error] 	at dotty.tools.dotc.transform.Erasure$Typer.$anonfun$4(Erasure.scala:792)
+[error] 	at dotty.tools.dotc.core.Decorators$ListDecorator$.zipWithConserve$extension(Decorators.scala:149)
+[error] 	at dotty.tools.dotc.transform.Erasure$Typer.typedApply(Erasure.scala:792)
+[error] 	at dotty.tools.dotc.typer.Typer.typedUnnamed$1(Typer.scala:2471)
+[error] 	at dotty.tools.dotc.typer.Typer.typedUnadapted(Typer.scala:2532)
+[error] 	at dotty.tools.dotc.typer.ReTyper.typedUnadapted(ReTyper.scala:125)
+[error] 	at dotty.tools.dotc.typer.Typer.typed(Typer.scala:2601)
+[error] 	at dotty.tools.dotc.typer.Typer.typed(Typer.scala:2605)
+[error] 	at dotty.tools.dotc.typer.Typer.typedExpr(Typer.scala:2720)
+[error] 	at dotty.tools.dotc.transform.Erasure$Typer.typedApply(Erasure.scala:779)
+[error] 	at dotty.tools.dotc.typer.Typer.typedUnnamed$1(Typer.scala:2471)
+[error] 	at dotty.tools.dotc.typer.Typer.typedUnadapted(Typer.scala:2532)
+[error] 	at dotty.tools.dotc.typer.ReTyper.typedUnadapted(ReTyper.scala:125)
+[error] 	at dotty.tools.dotc.typer.Typer.typed(Typer.scala:2601)
+[error] 	at dotty.tools.dotc.typer.Typer.typed(Typer.scala:2605)
+[error] 	at dotty.tools.dotc.typer.Typer.typedExpr(Typer.scala:2720)
+[error] 	at dotty.tools.dotc.transform.Erasure$Typer.$anonfun$4(Erasure.scala:792)
+[error] 	at dotty.tools.dotc.core.Decorators$ListDecorator$.zipWithConserve$extension(Decorators.scala:149)
+[error] 	at dotty.tools.dotc.transform.Erasure$Typer.typedApply(Erasure.scala:792)
+[error] 	at dotty.tools.dotc.typer.Typer.typedUnnamed$1(Typer.scala:2471)
+[error] 	at dotty.tools.dotc.typer.Typer.typedUnadapted(Typer.scala:2532)
+[error] 	at dotty.tools.dotc.typer.ReTyper.typedUnadapted(ReTyper.scala:125)
+[error] 	at dotty.tools.dotc.typer.Typer.typed(Typer.scala:2601)
+[error] 	at dotty.tools.dotc.typer.Typer.typed(Typer.scala:2605)
+[error] 	at dotty.tools.dotc.transform.Erasure$Typer.typedSelect(Erasure.scala:638)
+[error] 	at dotty.tools.dotc.typer.Typer.typedNamed$1(Typer.scala:2441)
+[error] 	at dotty.tools.dotc.typer.Typer.typedUnadapted(Typer.scala:2531)
+[error] 	at dotty.tools.dotc.typer.ReTyper.typedUnadapted(ReTyper.scala:125)
+[error] 	at dotty.tools.dotc.typer.Typer.typed(Typer.scala:2601)
+[error] 	at dotty.tools.dotc.typer.Typer.typed(Typer.scala:2605)
+[error] 	at dotty.tools.dotc.typer.Typer.typedExpr(Typer.scala:2720)
+[error] 	at dotty.tools.dotc.transform.Erasure$Typer.typedApply(Erasure.scala:779)
+[error] 	at dotty.tools.dotc.typer.Typer.typedUnnamed$1(Typer.scala:2471)
+[error] 	at dotty.tools.dotc.typer.Typer.typedUnadapted(Typer.scala:2532)
+[error] 	at dotty.tools.dotc.typer.ReTyper.typedUnadapted(ReTyper.scala:125)
+[error] 	at dotty.tools.dotc.typer.Typer.typed(Typer.scala:2601)
+[error] 	at dotty.tools.dotc.typer.Typer.typed(Typer.scala:2605)
+[error] 	at dotty.tools.dotc.typer.Typer.typedExpr(Typer.scala:2720)
+[error] 	at dotty.tools.dotc.transform.Erasure$Typer.$anonfun$4(Erasure.scala:792)
+[error] 	at dotty.tools.dotc.core.Decorators$ListDecorator$.zipWithConserve$extension(Decorators.scala:149)
+[error] 	at dotty.tools.dotc.transform.Erasure$Typer.typedApply(Erasure.scala:792)
+[error] 	at dotty.tools.dotc.typer.Typer.typedUnnamed$1(Typer.scala:2471)
+[error] 	at dotty.tools.dotc.typer.Typer.typedUnadapted(Typer.scala:2532)
+[error] 	at dotty.tools.dotc.typer.ReTyper.typedUnadapted(ReTyper.scala:125)
+[error] 	at dotty.tools.dotc.typer.Typer.typed(Typer.scala:2601)
+[error] 	at dotty.tools.dotc.typer.Typer.typed(Typer.scala:2605)
+[error] 	at dotty.tools.dotc.typer.Typer.traverse$1(Typer.scala:2653)
+[error] 	at dotty.tools.dotc.typer.Typer.typedStats(Typer.scala:2676)
+[error] 	at dotty.tools.dotc.transform.Erasure$Typer.typedStats(Erasure.scala:984)
+[error] 	at dotty.tools.dotc.typer.Typer.typedBlockStats(Typer.scala:898)
+[error] 	at dotty.tools.dotc.typer.Typer.typedBlock(Typer.scala:902)
+[error] 	at dotty.tools.dotc.typer.Typer.typedUnnamed$1(Typer.scala:2479)
+[error] 	at dotty.tools.dotc.typer.Typer.typedUnadapted(Typer.scala:2532)
+[error] 	at dotty.tools.dotc.typer.ReTyper.typedUnadapted(ReTyper.scala:125)
+[error] 	at dotty.tools.dotc.typer.Typer.typed(Typer.scala:2601)
+[error] 	at dotty.tools.dotc.typer.Typer.typed(Typer.scala:2598)
+[error] 	at dotty.tools.dotc.typer.Typer.typed(Typer.scala:2605)
+[error] 	at dotty.tools.dotc.typer.Typer.typedInlined(Typer.scala:1631)
+[error] 	at dotty.tools.dotc.transform.Erasure$Typer.typedInlined(Erasure.scala:841)
+[error] 	at dotty.tools.dotc.typer.Typer.typedUnnamed$1(Typer.scala:2492)
+[error] 	at dotty.tools.dotc.typer.Typer.typedUnadapted(Typer.scala:2532)
+[error] 	at dotty.tools.dotc.typer.ReTyper.typedUnadapted(ReTyper.scala:125)
+[error] 	at dotty.tools.dotc.typer.Typer.typed(Typer.scala:2601)
+[error] 	at dotty.tools.dotc.typer.Typer.typed(Typer.scala:2605)
+[error] 	at dotty.tools.dotc.typer.Typer.typedExpr(Typer.scala:2720)
+[error] 	at dotty.tools.dotc.typer.Typer.typedBlock(Typer.scala:904)
+[error] 	at dotty.tools.dotc.typer.Typer.typedUnnamed$1(Typer.scala:2479)
+[error] 	at dotty.tools.dotc.typer.Typer.typedUnadapted(Typer.scala:2532)
+[error] 	at dotty.tools.dotc.typer.ReTyper.typedUnadapted(ReTyper.scala:125)
+[error] 	at dotty.tools.dotc.typer.Typer.typed(Typer.scala:2601)
+[error] 	at dotty.tools.dotc.typer.Typer.typed(Typer.scala:2605)
+[error] 	at dotty.tools.dotc.typer.Typer.typedInlined(Typer.scala:1631)
+[error] 	at dotty.tools.dotc.transform.Erasure$Typer.typedInlined(Erasure.scala:841)
+[error] 	at dotty.tools.dotc.typer.Typer.typedUnnamed$1(Typer.scala:2492)
+[error] 	at dotty.tools.dotc.typer.Typer.typedUnadapted(Typer.scala:2532)
+[error] 	at dotty.tools.dotc.typer.ReTyper.typedUnadapted(ReTyper.scala:125)
+[error] 	at dotty.tools.dotc.typer.Typer.typed(Typer.scala:2601)
+[error] 	at dotty.tools.dotc.typer.Typer.typed(Typer.scala:2605)
+[error] 	at dotty.tools.dotc.transform.Erasure$Typer.typedTyped(Erasure.scala:594)
+[error] 	at dotty.tools.dotc.typer.Typer.typedUnnamed$1(Typer.scala:2476)
+[error] 	at dotty.tools.dotc.typer.Typer.typedUnadapted(Typer.scala:2532)
+[error] 	at dotty.tools.dotc.typer.ReTyper.typedUnadapted(ReTyper.scala:125)
+[error] 	at dotty.tools.dotc.typer.Typer.typed(Typer.scala:2601)
+[error] 	at dotty.tools.dotc.typer.Typer.typed(Typer.scala:2598)
+[error] 	at dotty.tools.dotc.typer.Typer.typed(Typer.scala:2605)
+[error] 	at dotty.tools.dotc.typer.Typer.typedInlined(Typer.scala:1631)
+[error] 	at dotty.tools.dotc.transform.Erasure$Typer.typedInlined(Erasure.scala:841)
+[error] 	at dotty.tools.dotc.typer.Typer.typedUnnamed$1(Typer.scala:2492)
+[error] 	at dotty.tools.dotc.typer.Typer.typedUnadapted(Typer.scala:2532)
+[error] 	at dotty.tools.dotc.typer.ReTyper.typedUnadapted(ReTyper.scala:125)
+[error] 	at dotty.tools.dotc.typer.Typer.typed(Typer.scala:2601)
+[error] 	at dotty.tools.dotc.typer.Typer.typed(Typer.scala:2605)
+[error] 	at dotty.tools.dotc.typer.Typer.typedExpr(Typer.scala:2720)
+[error] 	at dotty.tools.dotc.typer.Typer.$anonfun$33(Typer.scala:1987)
+[error] 	at dotty.tools.dotc.typer.PrepareInlineable$.dropInlineIfError(PrepareInlineable.scala:216)
+[error] 	at dotty.tools.dotc.typer.Typer.typedDefDef(Typer.scala:1987)
+[error] 	at dotty.tools.dotc.transform.Erasure$Typer.typedDefDef(Erasure.scala:893)
+[error] 	at dotty.tools.dotc.typer.Typer.typedNamed$1(Typer.scala:2448)
+[error] 	at dotty.tools.dotc.typer.Typer.typedUnadapted(Typer.scala:2531)
+[error] 	at dotty.tools.dotc.typer.ReTyper.typedUnadapted(ReTyper.scala:125)
+[error] 	at dotty.tools.dotc.typer.Typer.typed(Typer.scala:2601)
+[error] 	at dotty.tools.dotc.typer.Typer.typed(Typer.scala:2605)
+[error] 	at dotty.tools.dotc.typer.Typer.traverse$1(Typer.scala:2627)
+[error] 	at dotty.tools.dotc.typer.Typer.typedStats(Typer.scala:2676)
+[error] 	at dotty.tools.dotc.transform.Erasure$Typer.typedStats(Erasure.scala:984)
+[error] 	at dotty.tools.dotc.typer.Typer.typedClassDef(Typer.scala:2131)
+[error] 	at dotty.tools.dotc.typer.Typer.typedTypeOrClassDef$2(Typer.scala:2459)
+[error] 	at dotty.tools.dotc.typer.Typer.typedNamed$1(Typer.scala:2463)
+[error] 	at dotty.tools.dotc.typer.Typer.typedUnadapted(Typer.scala:2531)
+[error] 	at dotty.tools.dotc.typer.ReTyper.typedUnadapted(ReTyper.scala:125)
+[error] 	at dotty.tools.dotc.typer.Typer.typed(Typer.scala:2601)
+[error] 	at dotty.tools.dotc.typer.Typer.typed(Typer.scala:2605)
+[error] 	at dotty.tools.dotc.typer.Typer.traverse$1(Typer.scala:2627)
+[error] 	at dotty.tools.dotc.typer.Typer.typedStats(Typer.scala:2676)
+[error] 	at dotty.tools.dotc.transform.Erasure$Typer.typedStats(Erasure.scala:984)
+[error] 	at dotty.tools.dotc.typer.Typer.typedPackageDef(Typer.scala:2256)
+[error] 	at dotty.tools.dotc.typer.Typer.typedUnnamed$1(Typer.scala:2503)
+[error] 	at dotty.tools.dotc.typer.Typer.typedUnadapted(Typer.scala:2532)
+[error] 	at dotty.tools.dotc.typer.ReTyper.typedUnadapted(ReTyper.scala:125)
+[error] 	at dotty.tools.dotc.typer.Typer.typed(Typer.scala:2601)
+[error] 	at dotty.tools.dotc.typer.Typer.typed(Typer.scala:2605)
+[error] 	at dotty.tools.dotc.typer.Typer.typedExpr(Typer.scala:2720)
+[error] 	at dotty.tools.dotc.transform.Erasure.run(Erasure.scala:123)
+[error] 	at dotty.tools.dotc.core.Phases$Phase.runOn$$anonfun$1(Phases.scala:296)
+[error] 	at scala.collection.immutable.List.map(List.scala:246)
+[error] 	at dotty.tools.dotc.core.Phases$Phase.runOn(Phases.scala:297)
+[error] 	at dotty.tools.dotc.Run.runPhases$4$$anonfun$4(Run.scala:185)
+[error] 	at dotty.runtime.function.JProcedure1.apply(JProcedure1.java:15)
+[error] 	at dotty.runtime.function.JProcedure1.apply(JProcedure1.java:10)
+[error] 	at scala.collection.ArrayOps$.foreach$extension(ArrayOps.scala:1323)
+[error] 	at dotty.tools.dotc.Run.runPhases$5(Run.scala:195)
+[error] 	at dotty.tools.dotc.Run.compileUnits$$anonfun$1(Run.scala:203)
+[error] 	at dotty.runtime.function.JFunction0$mcV$sp.apply(JFunction0$mcV$sp.java:12)
+[error] 	at dotty.tools.dotc.util.Stats$.maybeMonitored(Stats.scala:67)
+[error] 	at dotty.tools.dotc.Run.compileUnits(Run.scala:210)
+[error] 	at dotty.tools.dotc.Run.compileSources(Run.scala:147)
+[error] 	at dotty.tools.dotc.Run.compile(Run.scala:129)
+[error] 	at dotty.tools.dotc.Driver.doCompile(Driver.scala:38)
+[error] 	at dotty.tools.dotc.Driver.process(Driver.scala:193)
+[error] 	at dotty.tools.dotc.Main.process(Main.scala)
+[error] 	at xsbt.CachedCompilerImpl.run(CachedCompilerImpl.java:69)
+[error] 	at xsbt.CompilerInterface.run(CompilerInterface.java:41)
+[error] 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+[error] 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+[error] 	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+[error] 	at java.base/java.lang.reflect.Method.invoke(Method.java:566)
+[error] 	at sbt.internal.inc.AnalyzingCompiler.invoke(AnalyzingCompiler.scala:330)
+[error] 	at sbt.internal.inc.AnalyzingCompiler.compile(AnalyzingCompiler.scala:113)
+[error] 	at sbt.internal.inc.MixedAnalyzingCompiler.$anonfun$compile$7(MixedAnalyzingCompiler.scala:186)
+[error] 	at scala.runtime.java8.JFunction0$mcV$sp.apply(JFunction0$mcV$sp.java:23)
+[error] 	at sbt.internal.inc.MixedAnalyzingCompiler.timed(MixedAnalyzingCompiler.scala:241)
+[error] 	at sbt.internal.inc.MixedAnalyzingCompiler.$anonfun$compile$4(MixedAnalyzingCompiler.scala:176)
+[error] 	at sbt.internal.inc.MixedAnalyzingCompiler.$anonfun$compile$4$adapted(MixedAnalyzingCompiler.scala:157)
+[error] 	at sbt.internal.inc.JarUtils$.withPreviousJar(JarUtils.scala:239)
+[error] 	at sbt.internal.inc.MixedAnalyzingCompiler.compileScala$1(MixedAnalyzingCompiler.scala:157)
+[error] 	at sbt.internal.inc.MixedAnalyzingCompiler.compile(MixedAnalyzingCompiler.scala:204)
+[error] 	at sbt.internal.inc.IncrementalCompilerImpl.$anonfun$compileInternal$1(IncrementalCompilerImpl.scala:573)
+[error] 	at sbt.internal.inc.IncrementalCompilerImpl.$anonfun$compileInternal$1$adapted(IncrementalCompilerImpl.scala:573)
+[error] 	at sbt.internal.inc.Incremental$.$anonfun$apply$5(Incremental.scala:173)
+[error] 	at sbt.internal.inc.Incremental$.$anonfun$apply$5$adapted(Incremental.scala:171)
+[error] 	at sbt.internal.inc.Incremental$$anon$2.run(Incremental.scala:458)
+[error] 	at sbt.internal.inc.IncrementalCommon$CycleState.next(IncrementalCommon.scala:116)
+[error] 	at sbt.internal.inc.IncrementalCommon$$anon$1.next(IncrementalCommon.scala:56)
+[error] 	at sbt.internal.inc.IncrementalCommon$$anon$1.next(IncrementalCommon.scala:52)
+[error] 	at sbt.internal.inc.IncrementalCommon.cycle(IncrementalCommon.scala:261)
+[error] 	at sbt.internal.inc.Incremental$.$anonfun$incrementalCompile$8(Incremental.scala:413)
+[error] 	at sbt.internal.inc.Incremental$.withClassfileManager(Incremental.scala:498)
+[error] 	at sbt.internal.inc.Incremental$.incrementalCompile(Incremental.scala:400)
+[error] 	at sbt.internal.inc.Incremental$.apply(Incremental.scala:165)
+[error] 	at sbt.internal.inc.IncrementalCompilerImpl.compileInternal(IncrementalCompilerImpl.scala:573)
+[error] 	at sbt.internal.inc.IncrementalCompilerImpl.$anonfun$compileIncrementally$1(IncrementalCompilerImpl.scala:491)
+[error] 	at sbt.internal.inc.IncrementalCompilerImpl.handleCompilationError(IncrementalCompilerImpl.scala:332)
+[error] 	at sbt.internal.inc.IncrementalCompilerImpl.compileIncrementally(IncrementalCompilerImpl.scala:420)
+[error] 	at sbt.internal.inc.IncrementalCompilerImpl.compile(IncrementalCompilerImpl.scala:137)
+[error] 	at sbt.Defaults$.compileIncrementalTaskImpl(Defaults.scala:2176)
+[error] 	at sbt.Defaults$.$anonfun$compileIncrementalTask$2(Defaults.scala:2133)
+[error] 	at sbt.internal.io.Retry$.apply(Retry.scala:40)
+[error] 	at sbt.internal.io.Retry$.apply(Retry.scala:23)
+[error] 	at sbt.internal.server.BspCompileTask$.compute(BspCompileTask.scala:31)
+[error] 	at sbt.Defaults$.$anonfun$compileIncrementalTask$1(Defaults.scala:2129)
+[error] 	at scala.Function1.$anonfun$compose$1(Function1.scala:49)
+[error] 	at sbt.internal.util.$tilde$greater.$anonfun$$u2219$1(TypeFunctions.scala:62)
+[error] 	at sbt.std.Transform$$anon$4.work(Transform.scala:68)
+[error] 	at sbt.Execute.$anonfun$submit$2(Execute.scala:282)
+[error] 	at sbt.internal.util.ErrorHandling$.wideConvert(ErrorHandling.scala:23)
+[error] 	at sbt.Execute.work(Execute.scala:291)
+[error] 	at sbt.Execute.$anonfun$submit$1(Execute.scala:282)
+[error] 	at sbt.ConcurrentRestrictions$$anon$4.$anonfun$submitValid$1(ConcurrentRestrictions.scala:265)
+[error] 	at sbt.CompletionService$$anon$2.call(CompletionService.scala:64)
+[error] 	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+[error] 	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:515)
+[error] 	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+[error] 	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1128)
+[error] 	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628)
+[error] 	at java.base/java.lang.Thread.run(Thread.java:834)
+[error] (Test / compileIncremental) scala.MatchError: TypeRef(TermRef(ThisType(TypeRef(NoPrefix,module class scala)),module Predef),type String) (of class dotty.tools.dotc.core.Types$CachedTypeRef)
+[error] Total time: 4 s, completed Nov 29, 2020, 3:17:15 PM
