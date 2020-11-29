@@ -1,6 +1,6 @@
-import verify._
+import verify.asserts.PowerAssert
 
-object Test extends Assertion {
+object Test {
   def foo(x: Int): String = "foo"
-  def bar(): Unit = assert(foo(0) == "foo")
+  def bar(): Unit = PowerAssert.assert(foo(0) == "foo")
 }
