@@ -9,13 +9,11 @@ class RecorderMacro(using Quotes) {
 
   private[this] val runtimeSym: Symbol = TypeRepr.of[RecorderRuntime[_, _]].typeSymbol
 
-  def apply[A: Type, R: Type](
-      recording: Expr[A],
-      listener: Expr[RecorderListener[A, R]]): Expr[R] = {
+  def apply[A: Type, R: Type](recording: Expr[A]): Expr[R] = {
     val termArg: Term = Term.of(recording).underlyingArgument
 
     '{
-      val recorderRuntime: RecorderRuntime[A, R] = new RecorderRuntime($listener)
+      val recorderRuntime: RecorderRuntime[A, R] = ???
       ${
         Block(
           recordExpressions(Term.of('{ recorderRuntime }), termArg),
@@ -140,8 +138,6 @@ class RecorderMacro(using Quotes) {
 }
 
 object RecorderMacro {
-  def apply[A: Type, R: Type](
-      recording: Expr[A],
-      listener: Expr[RecorderListener[A, R]])(using Quotes): Expr[R] =
-    new RecorderMacro().apply(recording, listener)
+  def apply[A: Type, R: Type](recording: Expr[A])(using Quotes): Expr[R] =
+    new RecorderMacro().apply(recording)
 }
