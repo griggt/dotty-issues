@@ -24,17 +24,9 @@ class RecorderMacro(using Quotes) {
   }
 
   private[this] def recordExpressions(runtime: Term, recording: Term): List[Term] = {
-    val resetValuesSel: Term = {
-      val m = runtimeSym.method("resetValues").head
-      runtime.select(m)
-    }
-    List(
-      Apply(resetValuesSel, List()),
-      recordExpression(runtime, recording)
-    )
+    recordExpression(runtime, recording) :: Nil
   }
 
-  // emit recorderRuntime.recordExpression(instrumented)
   private[this] def recordExpression(runtime: Term, expr: Term): Term = {
     val instrumented = recordAllValues(runtime, expr)
     val recordExpressionSel: Term = {

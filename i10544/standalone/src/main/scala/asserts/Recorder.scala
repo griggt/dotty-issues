@@ -7,7 +7,6 @@ abstract class Recorder[A] {
 
 // one instance per recording
 class RecorderRuntime[A] {
-  def resetValues(): Unit = ???
   def recordValue[U](value: U): U = ???
   def recordExpression(value: A): Unit = ???
 }
