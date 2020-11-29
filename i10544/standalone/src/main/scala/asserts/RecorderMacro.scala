@@ -24,37 +24,24 @@ class RecorderMacro(using Quotes) {
   }
 
   private[this] def recordExpressions(runtime: Term, recording: Term): List[Term] = {
-    val source = ""
-    val ast = recording.showExtractors
-
     val resetValuesSel: Term = {
       val m = runtimeSym.method("resetValues").head
       runtime.select(m)
     }
-    try {
-      List(
-        Apply(resetValuesSel, List()),
-        recordExpression(runtime, source, ast, recording)
-      )
-    } catch {
-      case e: Throwable => throw new RuntimeException(
-        "Expecty: Error rewriting expression.\nText: " + source + "\nAST : " + ast, e)
-    }
+    List(
+      Apply(resetValuesSel, List()),
+      recordExpression(runtime, recording)
+    )
   }
 
-  // emit recorderRuntime.recordExpression(<source>, <tree>, instrumented)
-  private[this] def recordExpression(runtime: Term, source: String, ast: String, expr: Term): Term = {
+  // emit recorderRuntime.recordExpression(instrumented)
+  private[this] def recordExpression(runtime: Term, expr: Term): Term = {
     val instrumented = recordAllValues(runtime, expr)
     val recordExpressionSel: Term = {
       val m = runtimeSym.method("recordExpression").head
       runtime.select(m)
     }
-    Apply(recordExpressionSel,
-      List(
-        Literal(Constant.String(source)),
-        Literal(Constant.String(ast)),
-        instrumented
-      ))
+    Apply(recordExpressionSel, List(instrumented))
   }
 
   private[this] def recordAllValues(runtime: Term, expr: Term): Term =
@@ -111,16 +98,9 @@ class RecorderMacro(using Quotes) {
       case Ident(_) if skipIdent(expr.symbol) => expr
       case _ =>
         val tapply = recordValueSel.appliedToType(expr.tpe)
-        Apply.copy(expr)(
-          tapply,
-          List(
-            expr,
-            Literal(Constant.Int(0))
-          )
-        )
+        Apply.copy(expr)(tapply, List(expr))
     }
   }
-
 }
 
 object RecorderMacro {
