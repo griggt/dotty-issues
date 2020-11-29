@@ -1,9 +1,8 @@
 package verify
 package asserts
 
-abstract class Recorder[A, R] {
-  inline def apply(value: A): R =
-    ${ RecorderMacro.apply('value) }
+abstract class Recorder[A] {
+  inline def apply(value: A): Unit = ${ RecorderMacro.apply('value) }
 }
 
 case class Recording[A](recordedExprs: List[RecordedExpression[A]])
@@ -11,15 +10,13 @@ case class RecordedValue(value: Any, anchor: Int)
 case class RecordedExpression[T](text: String, ast: String, value: T, recordedValues: List[RecordedValue])
 
 // one instance per recording
-class RecorderRuntime[A, R] {
+class RecorderRuntime[A] {
   def resetValues(): Unit = ???
   def recordValue[U](value: U, anchor: Int): U = ???
-  def recordMessage(message: => String): Unit = ???
   def recordExpression(text: String, ast: String, value: A): Unit = ???
-  def completeRecording(): R = ???
 }
 
-class PowerAssert extends Recorder[Boolean, Unit]
+class PowerAssert extends Recorder[Boolean]
 
 object PowerAssert {
   def assert: PowerAssert = new PowerAssert()

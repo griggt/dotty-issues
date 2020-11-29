@@ -7,24 +7,24 @@ class RecorderMacro(using Quotes) {
   import quotes.reflect._
   import util._
 
-  private[this] val runtimeSym: Symbol = TypeRepr.of[RecorderRuntime[_, _]].typeSymbol
+  private[this] val runtimeSym: Symbol = TypeRepr.of[RecorderRuntime[_]].typeSymbol
 
-  def apply[A: Type, R: Type](recording: Expr[A]): Expr[R] = {
+  def apply[A: Type](recording: Expr[A]): Expr[Unit] = {
     val termArg: Term = Term.of(recording).underlyingArgument
 
     '{
-      val recorderRuntime: RecorderRuntime[A, R] = ???
+      val recorderRuntime: RecorderRuntime[A] = ???
       ${
         Block(
           recordExpressions(Term.of('{ recorderRuntime }), termArg),
-          Term.of('{ recorderRuntime.completeRecording() })
-        ).asExprOf[R]
+          Term.of('{ () })
+        ).asExprOf[Unit]
       }
     }
   }
 
   private[this] def recordExpressions(runtime: Term, recording: Term): List[Term] = {
-    val source = getSourceCode(recording)
+    val source = ""
     val ast = recording.showExtractors
 
     val resetValuesSel: Term = {
@@ -62,9 +62,10 @@ class RecorderMacro(using Quotes) {
       case New(_)     => expr
       case Literal(_) => expr
       case Typed(r @ Repeated(xs, y), tpe) => Typed.copy(r)(recordSubValues(runtime, r), tpe)
+
       // don't record value of implicit "this" added by compiler; couldn't find a better way to detect implicit "this" than via point
       case Select(x@This(_), y) if expr.pos.start == x.pos.start => expr
-      // case x: Select if x.symbol.isModule => expr // don't try to record the value of packages
+
       case _ => recordValue(runtime, recordSubValues(runtime, expr), expr)
     }
 
@@ -76,7 +77,6 @@ class RecorderMacro(using Quotes) {
         } catch {
           case e: AssertionError => expr
         }
-      // case TypeApply(x, ys) => recordValue(TypeApply.copy(expr)(recordSubValues(x), ys), expr)
       case TypeApply(x, ys) => TypeApply.copy(expr)(recordSubValues(runtime, x), ys)
       case Select(x, y)     => Select.copy(expr)(recordAllValues(runtime, x), y)
       case Typed(x, tpe)    => Typed.copy(expr)(recordSubValues(runtime, x), tpe)
@@ -85,8 +85,6 @@ class RecorderMacro(using Quotes) {
     }
 
   private[this] def recordValue(runtime: Term, expr: Term, origExpr: Term): Term = {
-    // debug
-    // println("recording " + expr.showExtractors + " at " + getAnchor(expr))
     val recordValueSel: Term = {
       val m = runtimeSym.method("recordValue").head
       runtime.select(m)
@@ -117,27 +115,15 @@ class RecorderMacro(using Quotes) {
           tapply,
           List(
             expr,
-            Literal(Constant.Int(getAnchor(expr)))
+            Literal(Constant.Int(0))
           )
         )
     }
   }
 
-  private[this] def getSourceCode(expr: Tree): String = ""
-
-  private[this] def getAnchor(expr: Term): Int =
-    expr match {
-      case Apply(x, ys) if x.symbol.fullName == "verify.asserts.RecorderRuntime.recordValue" && ys.nonEmpty =>
-        getAnchor(ys.head)
-      case Apply(x, ys)     => getAnchor(x) + 0
-      case TypeApply(x, ys) => getAnchor(x) + 0
-      case Select(x, y)     =>
-        expr.pos.startColumn + math.max(0, expr.pos.sourceCode.indexOf(y))
-      case _                => expr.pos.startColumn
-    }
 }
 
 object RecorderMacro {
-  def apply[A: Type, R: Type](recording: Expr[A])(using Quotes): Expr[R] =
+  def apply[A: Type](recording: Expr[A])(using Quotes): Expr[Unit] =
     new RecorderMacro().apply(recording)
 }
