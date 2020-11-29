@@ -13,38 +13,28 @@ class RecorderMacro(using Quotes) {
     val termArg: Term = Term.of(recording).underlyingArgument
 
     '{
-      val recorderRuntime: RecorderRuntime[A] = ???
+      val runtime: RecorderRuntime[A] = ???
       ${
         Block(
-          recordExpressions(Term.of('{ recorderRuntime }), termArg),
+          recordExpressions(Term.of('{ runtime }), termArg),
           Term.of('{ () })
         ).asExprOf[Unit]
       }
     }
   }
 
-  private[this] def recordExpressions(runtime: Term, recording: Term): List[Term] = {
+  private[this] def recordExpressions(runtime: Term, recording: Term): List[Term] =
     recordExpression(runtime, recording) :: Nil
-  }
 
-  private[this] def recordExpression(runtime: Term, expr: Term): Term = {
-    val instrumented = recordAllValues(runtime, expr)
-    val recordExpressionSel: Term = {
-      val m = runtimeSym.method("recordExpression").head
-      runtime.select(m)
-    }
-    Apply(recordExpressionSel, List(instrumented))
-  }
+  private[this] def recordExpression(runtime: Term, expr: Term): Term =
+    recordAllValues(runtime, expr)
 
   private[this] def recordAllValues(runtime: Term, expr: Term): Term =
     expr match {
       case New(_)     => expr
       case Literal(_) => expr
-      case Typed(r @ Repeated(xs, y), tpe) => Typed.copy(r)(recordSubValues(runtime, r), tpe)
-
-      // don't record value of implicit "this" added by compiler; couldn't find a better way to detect implicit "this" than via point
       case Select(x@This(_), y) if expr.pos.start == x.pos.start => expr
-
+      case Typed(r @ Repeated(xs, y), tpe) => Typed.copy(r)(recordSubValues(runtime, r), tpe)
       case _ => recordValue(runtime, recordSubValues(runtime, expr), expr)
     }
 
