@@ -1,61 +1,24 @@
-/*
- * Scala (https://www.scala-lang.org)
- *
- * Copyright EPFL and Lightbend, Inc.
- *
- * Licensed under Apache License 2.0
- * (http://www.apache.org/licenses/LICENSE-2.0).
- *
- * See the NOTICE file distributed with this work for
- * additional information regarding copyright ownership.
- */
-
 package verify
 package asserts
 
 import scala.quoted._
 
-class RecorderMacro(using qctx0: Quotes) {
-  // https://github.com/lampepfl/dotty/releases/tag/3.0.0-M2
-  // https://dotty.epfl.ch/docs/reference/metaprogramming/tasty-reflect.html#sealing-and-unsealing
-  import qctx0.reflect._
+class RecorderMacro(using Quotes) {
+  import quotes.reflect._
   import util._
 
   private[this] val runtimeSym: Symbol = TypeRepr.of[RecorderRuntime[_, _]].typeSymbol
 
   def apply[A: Type, R: Type](
       recording: Expr[A],
-      message: Expr[String],
       listener: Expr[RecorderListener[A, R]]): Expr[R] = {
     val termArg: Term = Term.of(recording).underlyingArgument
 
     '{
       val recorderRuntime: RecorderRuntime[A, R] = new RecorderRuntime($listener)
-      recorderRuntime.recordMessage($message)
       ${
         Block(
           recordExpressions(Term.of('{ recorderRuntime }), termArg),
-          Term.of('{ recorderRuntime.completeRecording() })
-        ).asExprOf[R]
-      }
-    }
-  }
-
-  def apply2[A: Type, R: Type](
-      expected: Expr[A],
-      found: Expr[A],
-      message: Expr[String],
-      listener: Expr[RecorderListener[A, R]]): Expr[R] = {
-    val expectedArg: Term = Term.of(expected).underlyingArgument
-    val foundArg: Term = Term.of(found).underlyingArgument
-
-    '{
-      val recorderRuntime: RecorderRuntime[A, R] = new RecorderRuntime($listener)
-      recorderRuntime.recordMessage($message)
-      ${
-        Block(
-          recordExpressions(Term.of('{ recorderRuntime }), expectedArg) :::
-          recordExpressions(Term.of('{ recorderRuntime }), foundArg),
           Term.of('{ recorderRuntime.completeRecording() })
         ).asExprOf[R]
       }
@@ -162,10 +125,7 @@ class RecorderMacro(using qctx0: Quotes) {
     }
   }
 
-  private[this] def getSourceCode(expr: Tree): String = {
-    val pos = expr.pos
-    (" " * pos.startColumn) + pos.sourceCode
-  }
+  private[this] def getSourceCode(expr: Tree): String = ""
 
   private[this] def getAnchor(expr: Term): Int =
     expr match {
@@ -182,30 +142,6 @@ class RecorderMacro(using qctx0: Quotes) {
 object RecorderMacro {
   def apply[A: Type, R: Type](
       recording: Expr[A],
-      listener: Expr[RecorderListener[A, R]])(using qctx: Quotes): Expr[R] =
-    new RecorderMacro().apply(recording, '{""}, listener)
-
-  /** captures a method invocation in the shape of assert(expr, message). */
-  def apply[A: Type, R: Type](
-      recording: Expr[A],
-      message: Expr[String],
-      listener: Expr[RecorderListener[A, R]])(using qctx: Quotes): Expr[R] =
-    new RecorderMacro().apply(recording, message, listener)
-}
-
-object StringRecorderMacro {
-  /** captures a method invocation in the shape of assertEquals(expected, found). */
-  def apply[R: Type](
-      expected: Expr[String],
-      found: Expr[String],
-      listener: Expr[RecorderListener[String, R]])(using qctx: Quotes): Expr[R] =
-    new RecorderMacro().apply2[String, R](expected, found, '{""}, listener)
-
-  /** captures a method invocation in the shape of assertEquals(expected, found). */
-  def apply[R: Type](
-      expected: Expr[String],
-      found: Expr[String],
-      message: Expr[String],
-      listener: Expr[RecorderListener[String, R]])(using qctx: Quotes): Expr[R] =
-    new RecorderMacro().apply2[String, R](expected, found, message, listener)
+      listener: Expr[RecorderListener[A, R]])(using Quotes): Expr[R] =
+    new RecorderMacro().apply(recording, listener)
 }

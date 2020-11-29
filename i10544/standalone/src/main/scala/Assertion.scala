@@ -2,6 +2,6 @@ package verify
 
 import verify.asserts.PowerAssert
 
-trait Assertion /*extends asserts.AssertEquals[Unit]*/ {
+trait Assertion {
   lazy val assert: PowerAssert = new PowerAssert()
 }
