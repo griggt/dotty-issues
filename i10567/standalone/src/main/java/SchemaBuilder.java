@@ -707,24 +707,6 @@ public class SchemaBuilder {
       return type(names.get(name, namespace));
     }
 
-    /**
-     * A plain boolean type without custom properties. This is equivalent to:
-     *
-     * <pre>
-     * booleanBuilder().endBoolean();
-     * </pre>
-     */
-    public final R booleanType() {
-      return booleanBuilder().endBoolean();
-    }
-
-    /**
-     * Build a boolean type that can set custom properties. If custom properties are
-     * not needed it is simpler to use {@link #booleanType()}.
-     */
-    public final BooleanBuilder<R> booleanBuilder() {
-      return BooleanBuilder.create(context, names);
-    }
 
     /**
      * A plain int type without custom properties. This is equivalent to:
@@ -1051,25 +1033,6 @@ public class SchemaBuilder {
     }
 
     /**
-     * A plain boolean type without custom properties. This is equivalent to:
-     *
-     * <pre>
-     * booleanBuilder().endBoolean();
-     * </pre>
-     */
-    public final BooleanDefault<R> booleanType() {
-      return booleanBuilder().endBoolean();
-    }
-
-    /**
-     * Build a boolean type that can set custom properties. If custom properties are
-     * not needed it is simpler to use {@link #booleanType()}.
-     */
-    public final BooleanBuilder<BooleanDefault<R>> booleanBuilder() {
-      return BooleanBuilder.create(wrap(new BooleanDefault<>(bldr)), names);
-    }
-
-    /**
      * A plain int type without custom properties. This is equivalent to:
      *
      * <pre>
@@ -1298,24 +1261,6 @@ public class SchemaBuilder {
       this.names = bldr.names();
     }
 
-    /**
-     * A plain boolean type without custom properties. This is equivalent to:
-     *
-     * <pre>
-     * booleanBuilder().endBoolean();
-     * </pre>
-     */
-    public UnionAccumulator<BooleanDefault<R>> booleanType() {
-      return booleanBuilder().endBoolean();
-    }
-
-    /**
-     * Build a boolean type that can set custom properties. If custom properties are
-     * not needed it is simpler to use {@link #booleanType()}.
-     */
-    public BooleanBuilder<UnionAccumulator<BooleanDefault<R>>> booleanBuilder() {
-      return BooleanBuilder.create(completion(new BooleanDefault<>(bldr)), names);
-    }
 
     /**
      * A plain int type without custom properties. This is equivalent to:
@@ -1533,7 +1478,7 @@ public class SchemaBuilder {
      * </pre>
      */
     public FieldAssembler<R> requiredBoolean(String fieldName) {
-      return name(fieldName).type().booleanType().noDefault();
+      throw new UnsupportedOperationException();
     }
 
     /**
@@ -1547,7 +1492,7 @@ public class SchemaBuilder {
      * </pre>
      */
     public FieldAssembler<R> optionalBoolean(String fieldName) {
-      return name(fieldName).type().optional().booleanType();
+      throw new UnsupportedOperationException();
     }
 
     /**
@@ -1561,7 +1506,7 @@ public class SchemaBuilder {
      * </pre>
      */
     public FieldAssembler<R> nullableBoolean(String fieldName, boolean defaultVal) {
-      return name(fieldName).type().nullable().booleanType().booleanDefault(defaultVal);
+      throw new UnsupportedOperationException();
     }
 
     /**
