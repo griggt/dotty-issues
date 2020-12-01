@@ -1,4 +1,4 @@
-import org.apache.avro.SchemaBuilder
+//import org.apache.avro.SchemaBuilder
 
 object Test {
   def bldr = SchemaBuilder.builder()
