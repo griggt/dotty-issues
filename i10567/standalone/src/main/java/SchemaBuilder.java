@@ -197,53 +197,6 @@ public class SchemaBuilder {
   }
 
   /**
-   * An abstraction for sharing code amongst all primitive type builders.
-   */
-  private static abstract class PrimitiveBuilder<R, P extends PrimitiveBuilder<R, P>> extends PropBuilder<P> {
-    private final Completion<R> context;
-    private final Schema immutable;
-
-    protected PrimitiveBuilder(Completion<R> context, NameContext names, Schema.Type type) {
-      this.context = context;
-      this.immutable = names.getFullname(type.getName());
-    }
-
-    private R end() {
-      Schema schema = immutable;
-      if (super.hasProps()) {
-        schema = Schema.create(immutable.getType());
-        addPropsTo(schema);
-      }
-      return context.complete(schema);
-    }
-  }
-
-
-  /**
-   * Builds an Avro string type with optional properties. Set properties with
-   * {@link #prop(String, String)}, and finalize with {@link #endString()}
-   **/
-  public static final class StringBldr<R> extends PrimitiveBuilder<R, StringBldr<R>> {
-    private StringBldr(Completion<R> context, NameContext names) {
-      super(context, names, Schema.Type.STRING);
-    }
-
-    private static <R> StringBldr<R> create(Completion<R> context, NameContext names) {
-      return new StringBldr<>(context, names);
-    }
-
-    @Override
-    protected StringBldr<R> self() {
-      return this;
-    }
-
-    /** complete building this type, return control to context **/
-    public R endString() {
-      return super.end();
-    }
-  }
-
-  /**
    * Builds an Avro Fixed type with optional properties, namespace, doc, and
    * aliases.
    * <p/>
@@ -411,25 +364,6 @@ public class SchemaBuilder {
     }
 
     /**
-     * A plain string type without custom properties. This is equivalent to:
-     *
-     * <pre>
-     * stringBuilder().endString();
-     * </pre>
-     */
-    public final R stringType() {
-      return stringBuilder().endString();
-    }
-
-    /**
-     * Build a string type that can set custom properties. If custom properties are
-     * not needed it is simpler to use {@link #stringType()}.
-     */
-    public final StringBldr<R> stringBuilder() {
-      return StringBldr.create(context, names);
-    }
-
-    /**
      * Build an Avro fixed type. Example usage:
      *
      * <pre>
@@ -444,17 +378,6 @@ public class SchemaBuilder {
      **/
     public final FixedBuilder<R> fixed(String name) {
       return FixedBuilder.create(context, names, name);
-    }
-
-    /**
-     * Build an Avro union schema type. Example usage:
-     *
-     * <pre>
-     * unionOf().stringType().and().bytesType().endUnion()
-     * </pre>
-     **/
-    protected BaseTypeBuilder<UnionAccumulator<R>> unionOf() {
-      return UnionBuilder.create(context, names);
     }
 
     /**
@@ -485,28 +408,8 @@ public class SchemaBuilder {
     }
 
     @Override
-    public BaseTypeBuilder<UnionAccumulator<R>> unionOf() {
-      return super.unionOf();
-    }
-
-    @Override
     public BaseTypeBuilder<R> nullable() {
       return super.nullable();
-    }
-  }
-
-  /** A special builder for unions. Unions cannot nest unions directly **/
-  private static final class UnionBuilder<R> extends BaseTypeBuilder<UnionAccumulator<R>> {
-    private UnionBuilder(Completion<R> context, NameContext names) {
-      this(context, names, Collections.emptyList());
-    }
-
-    private static <R> UnionBuilder<R> create(Completion<R> context, NameContext names) {
-      return new UnionBuilder<>(context, names);
-    }
-
-    private UnionBuilder(Completion<R> context, NameContext names, List<Schema> schemas) {
-      super(new UnionCompletion<>(context, names, schemas), names);
     }
   }
 
@@ -540,25 +443,6 @@ public class SchemaBuilder {
       this.bldr = bldr;
       this.names = bldr.names();
       this.wrapper = wrapper;
-    }
-
-    /**
-     * A plain string type without custom properties. This is equivalent to:
-     *
-     * <pre>
-     * stringBuilder().endString();
-     * </pre>
-     */
-    public final StringDefault<R> stringType() {
-      return stringBuilder().endString();
-    }
-
-    /**
-     * Build a string type that can set custom properties. If custom properties are
-     * not needed it is simpler to use {@link #stringType()}.
-     */
-    public final StringBldr<StringDefault<R>> stringBuilder() {
-      return StringBldr.create(wrap(new StringDefault<>(bldr)), names);
     }
 
     /** Build an Avro fixed type. **/
@@ -635,25 +519,6 @@ public class SchemaBuilder {
     private UnionFieldTypeBuilder(FieldBuilder<R> bldr) {
       this.bldr = bldr;
       this.names = bldr.names();
-    }
-
-    /**
-     * A plain string type without custom properties. This is equivalent to:
-     *
-     * <pre>
-     * stringBuilder().endString();
-     * </pre>
-     */
-    public UnionAccumulator<StringDefault<R>> stringType() {
-      return stringBuilder().endString();
-    }
-
-    /**
-     * Build a string type that can set custom properties. If custom properties are
-     * not needed it is simpler to use {@link #stringType()}.
-     */
-    public StringBldr<UnionAccumulator<StringDefault<R>>> stringBuilder() {
-      return StringBldr.create(completion(new StringDefault<>(bldr)), names);
     }
 
     /** Build an Avro fixed type. **/
@@ -902,7 +767,7 @@ public class SchemaBuilder {
      * </pre>
      */
     public FieldAssembler<R> requiredString(String fieldName) {
-      return name(fieldName).type().stringType().noDefault();
+      throw new UnsupportedOperationException();
     }
 
     /**
@@ -916,7 +781,7 @@ public class SchemaBuilder {
      * </pre>
      */
     public FieldAssembler<R> optionalString(String fieldName) {
-      return name(fieldName).type().optional().stringType();
+      throw new UnsupportedOperationException();
     }
 
     /**
@@ -930,7 +795,7 @@ public class SchemaBuilder {
      * </pre>
      */
     public FieldAssembler<R> nullableString(String fieldName, String defaultVal) {
-      return name(fieldName).type().nullable().stringType().stringDefault(defaultVal);
+      throw new UnsupportedOperationException();
     }
 
     /**
@@ -1462,25 +1327,6 @@ public class SchemaBuilder {
     }
   }
 
-  private static abstract class NestedCompletion<R> extends Completion<R> {
-    private final Completion<R> context;
-    private final PropBuilder<?> assembler;
-
-    private NestedCompletion(PropBuilder<?> assembler, Completion<R> context) {
-      this.context = context;
-      this.assembler = assembler;
-    }
-
-    @Override
-    protected final R complete(Schema schema) {
-      Schema outer = outerSchema(schema);
-      assembler.addPropsTo(outer);
-      return context.complete(outer);
-    }
-
-    protected abstract Schema outerSchema(Schema inner);
-  }
-
   private static class UnionCompletion<R> extends Completion<UnionAccumulator<R>> {
     private final Completion<R> context;
     private final NameContext names;
@@ -1513,11 +1359,6 @@ public class SchemaBuilder {
       this.context = context;
       this.names = names;
       this.schemas = schemas;
-    }
-
-    /** Add an additional type to this union **/
-    public BaseTypeBuilder<UnionAccumulator<R>> and() {
-      return new UnionBuilder<>(context, names, schemas);
     }
 
     /** Complete this union **/
