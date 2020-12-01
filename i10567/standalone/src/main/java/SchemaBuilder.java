@@ -379,24 +379,6 @@ public class SchemaBuilder {
     public final FixedBuilder<R> fixed(String name) {
       return FixedBuilder.create(context, names, name);
     }
-
-    /**
-     * A shortcut for building a union of a type and null.
-     * <p/>
-     * For example, the code snippets below are equivalent:
-     *
-     * <pre>
-     * nullable().booleanType()
-     * </pre>
-     *
-     * <pre>
-     * unionOf().booleanType().and().nullType().endUnion()
-     * </pre>
-     **/
-    protected BaseTypeBuilder<R> nullable() {
-      return new BaseTypeBuilder<>(new NullableCompletion<>(context), names);
-    }
-
   }
 
   /**
@@ -405,11 +387,6 @@ public class SchemaBuilder {
   public static final class TypeBuilder<R> extends BaseTypeBuilder<R> {
     private TypeBuilder(Completion<R> context, NameContext names) {
       super(context, names);
-    }
-
-    @Override
-    public BaseTypeBuilder<R> nullable() {
-      return super.nullable();
     }
   }
 
@@ -425,306 +402,90 @@ public class SchemaBuilder {
       this.record = record;
     }
 
-    /**
-     * Add a field with the given name.
-     *
-     * @return A {@link FieldBuilder} for the given name.
-     */
-    public FieldBuilder<R> name(String fieldName) {
-      return new FieldBuilder<>(this, names, fieldName);
-    }
-
-    /**
-     * Shortcut for creating a boolean field with the given name and no default.
-     * <p/>
-     * This is equivalent to:
-     *
-     * <pre>
-     * name(fieldName).type().booleanType().noDefault()
-     * </pre>
-     */
     public FieldAssembler<R> requiredBoolean(String fieldName) {
       throw new UnsupportedOperationException();
     }
 
-    /**
-     * Shortcut for creating an optional boolean field: a union of null and boolean
-     * with null default.
-     * <p/>
-     * This is equivalent to:
-     *
-     * <pre>
-     * name(fieldName).type().optional().booleanType()
-     * </pre>
-     */
     public FieldAssembler<R> optionalBoolean(String fieldName) {
       throw new UnsupportedOperationException();
     }
 
-    /**
-     * Shortcut for creating a nullable boolean field: a union of boolean and null
-     * with an boolean default.
-     * <p/>
-     * This is equivalent to:
-     *
-     * <pre>
-     * name(fieldName).type().nullable().booleanType().booleanDefault(defaultVal)
-     * </pre>
-     */
     public FieldAssembler<R> nullableBoolean(String fieldName, boolean defaultVal) {
       throw new UnsupportedOperationException();
     }
 
-    /**
-     * Shortcut for creating an int field with the given name and no default.
-     * <p/>
-     * This is equivalent to:
-     *
-     * <pre>
-     * name(fieldName).type().intType().noDefault()
-     * </pre>
-     */
     public FieldAssembler<R> requiredInt(String fieldName) {
       throw new UnsupportedOperationException();
     }
 
-    /**
-     * Shortcut for creating an optional int field: a union of null and int with
-     * null default.
-     * <p/>
-     * This is equivalent to:
-     *
-     * <pre>
-     * name(fieldName).type().optional().intType()
-     * </pre>
-     */
     public FieldAssembler<R> optionalInt(String fieldName) {
       throw new UnsupportedOperationException();
     }
 
-    /**
-     * Shortcut for creating a nullable int field: a union of int and null with an
-     * int default.
-     * <p/>
-     * This is equivalent to:
-     *
-     * <pre>
-     * name(fieldName).type().nullable().intType().intDefault(defaultVal)
-     * </pre>
-     */
     public FieldAssembler<R> nullableInt(String fieldName, int defaultVal) {
       throw new UnsupportedOperationException();
     }
 
-    /**
-     * Shortcut for creating a long field with the given name and no default.
-     * <p/>
-     * This is equivalent to:
-     *
-     * <pre>
-     * name(fieldName).type().longType().noDefault()
-     * </pre>
-     */
     public FieldAssembler<R> requiredLong(String fieldName) {
       throw new UnsupportedOperationException();
     }
 
-    /**
-     * Shortcut for creating an optional long field: a union of null and long with
-     * null default.
-     * <p/>
-     * This is equivalent to:
-     *
-     * <pre>
-     * name(fieldName).type().optional().longType()
-     * </pre>
-     */
     public FieldAssembler<R> optionalLong(String fieldName) {
       throw new UnsupportedOperationException();
     }
 
-    /**
-     * Shortcut for creating a nullable long field: a union of long and null with a
-     * long default.
-     * <p/>
-     * This is equivalent to:
-     *
-     * <pre>
-     * name(fieldName).type().nullable().longType().longDefault(defaultVal)
-     * </pre>
-     */
     public FieldAssembler<R> nullableLong(String fieldName, long defaultVal) {
       throw new UnsupportedOperationException();
     }
 
-    /**
-     * Shortcut for creating a float field with the given name and no default.
-     * <p/>
-     * This is equivalent to:
-     *
-     * <pre>
-     * name(fieldName).type().floatType().noDefault()
-     * </pre>
-     */
     public FieldAssembler<R> requiredFloat(String fieldName) {
       throw new UnsupportedOperationException();
     }
 
-    /**
-     * Shortcut for creating an optional float field: a union of null and float with
-     * null default.
-     * <p/>
-     * This is equivalent to:
-     *
-     * <pre>
-     * name(fieldName).type().optional().floatType()
-     * </pre>
-     */
     public FieldAssembler<R> optionalFloat(String fieldName) {
       throw new UnsupportedOperationException();
     }
 
-    /**
-     * Shortcut for creating a nullable float field: a union of float and null with
-     * a float default.
-     * <p/>
-     * This is equivalent to:
-     *
-     * <pre>
-     * name(fieldName).type().nullable().floatType().floatDefault(defaultVal)
-     * </pre>
-     */
     public FieldAssembler<R> nullableFloat(String fieldName, float defaultVal) {
       throw new UnsupportedOperationException();
     }
 
-    /**
-     * Shortcut for creating a double field with the given name and no default.
-     * <p/>
-     * This is equivalent to:
-     *
-     * <pre>
-     * name(fieldName).type().doubleType().noDefault()
-     * </pre>
-     */
     public FieldAssembler<R> requiredDouble(String fieldName) {
       throw new UnsupportedOperationException();
     }
 
-    /**
-     * Shortcut for creating an optional double field: a union of null and double
-     * with null default.
-     * <p/>
-     * This is equivalent to:
-     *
-     * <pre>
-     * name(fieldName).type().optional().doubleType()
-     * </pre>
-     */
     public FieldAssembler<R> optionalDouble(String fieldName) {
       throw new UnsupportedOperationException();
     }
 
-    /**
-     * Shortcut for creating a nullable double field: a union of double and null
-     * with a double default.
-     * <p/>
-     * This is equivalent to:
-     *
-     * <pre>
-     * name(fieldName).type().nullable().doubleType().doubleDefault(defaultVal)
-     * </pre>
-     */
     public FieldAssembler<R> nullableDouble(String fieldName, double defaultVal) {
       throw new UnsupportedOperationException();
     }
 
-    /**
-     * Shortcut for creating a string field with the given name and no default.
-     * <p/>
-     * This is equivalent to:
-     *
-     * <pre>
-     * name(fieldName).type().stringType().noDefault()
-     * </pre>
-     */
     public FieldAssembler<R> requiredString(String fieldName) {
       throw new UnsupportedOperationException();
     }
 
-    /**
-     * Shortcut for creating an optional string field: a union of null and string
-     * with null default.
-     * <p/>
-     * This is equivalent to:
-     *
-     * <pre>
-     * name(fieldName).type().optional().stringType()
-     * </pre>
-     */
     public FieldAssembler<R> optionalString(String fieldName) {
       throw new UnsupportedOperationException();
     }
 
-    /**
-     * Shortcut for creating a nullable string field: a union of string and null
-     * with a string default.
-     * <p/>
-     * This is equivalent to:
-     *
-     * <pre>
-     * name(fieldName).type().nullable().stringType().stringDefault(defaultVal)
-     * </pre>
-     */
     public FieldAssembler<R> nullableString(String fieldName, String defaultVal) {
       throw new UnsupportedOperationException();
     }
 
-    /**
-     * Shortcut for creating a bytes field with the given name and no default.
-     * <p/>
-     * This is equivalent to:
-     *
-     * <pre>
-     * name(fieldName).type().bytesType().noDefault()
-     * </pre>
-     */
     public FieldAssembler<R> requiredBytes(String fieldName) {
       throw new UnsupportedOperationException();
     }
 
-    /**
-     * Shortcut for creating an optional bytes field: a union of null and bytes with
-     * null default.
-     * <p/>
-     * This is equivalent to:
-     *
-     * <pre>
-     * name(fieldName).type().optional().bytesType()
-     * </pre>
-     */
     public FieldAssembler<R> optionalBytes(String fieldName) {
       throw new UnsupportedOperationException();
     }
 
-    /**
-     * Shortcut for creating a nullable bytes field: a union of bytes and null with
-     * a bytes default.
-     * <p/>
-     * This is equivalent to:
-     *
-     * <pre>
-     * name(fieldName).type().nullable().bytesType().bytesDefault(defaultVal)
-     * </pre>
-     */
     public FieldAssembler<R> nullableBytes(String fieldName, byte[] defaultVal) {
       throw new UnsupportedOperationException();
     }
 
-    /**
-     * End adding fields to this record, returning control to the context that this
-     * record builder was created in.
-     */
     public R endRecord() {
       record.setFields(fields);
       return context.complete(record);
@@ -737,190 +498,6 @@ public class SchemaBuilder {
 
   }
 
-  /**
-   * Builds a Field in the context of a {@link FieldAssembler}.
-   *
-   * Usage is to first configure any of the optional parameters and then to call
-   * one of the type methods to complete the field. For example
-   *
-   * <pre>
-   *   .namespace("org.apache.example").orderDescending().type()
-   * </pre>
-   *
-   * Optional parameters for a field are namespace, doc, order, and aliases.
-   */
-  public final static class FieldBuilder<R> extends NamedBuilder<FieldBuilder<R>> {
-    private final FieldAssembler<R> fields;
-    private Schema.Field.Order order = Schema.Field.Order.ASCENDING;
-
-    private FieldBuilder(FieldAssembler<R> fields, NameContext names, String name) {
-      super(names, name);
-      this.fields = fields;
-    }
-
-    /** Set this field to have ascending order. Ascending is the default **/
-    public FieldBuilder<R> orderAscending() {
-      order = Schema.Field.Order.ASCENDING;
-      return self();
-    }
-
-    /** Set this field to have descending order. Descending is the default **/
-    public FieldBuilder<R> orderDescending() {
-      order = Schema.Field.Order.DESCENDING;
-      return self();
-    }
-
-    /** Set this field to ignore order. **/
-    public FieldBuilder<R> orderIgnore() {
-      order = Schema.Field.Order.IGNORE;
-      return self();
-    }
-
-    /**
-     * Final step in configuring this field, finalizing name, namespace, alias, and
-     * order. Sets the field's type to the provided schema, returns a
-     * {@link GenericDefault}.
-     */
-    public GenericDefault<R> type(Schema type) {
-      return new GenericDefault<>(this, type);
-    }
-
-    /**
-     * Final step in configuring this field, finalizing name, namespace, alias, and
-     * order. Sets the field's type to the schema by name reference.
-     * <p/>
-     * The name must correspond with a named schema that has already been created in
-     * the context of this builder. The name may be a fully qualified name, or a
-     * short name. If it is a short name, the namespace context of this builder will
-     * be used.
-     * <p/>
-     * The name and namespace context rules are the same as the Avro schema JSON
-     * specification.
-     */
-    public GenericDefault<R> type(String name) {
-      return type(name, null);
-    }
-
-    /**
-     * Final step in configuring this field, finalizing name, namespace, alias, and
-     * order. Sets the field's type to the schema by name reference.
-     * <p/>
-     * The name must correspond with a named schema that has already been created in
-     * the context of this builder. The name may be a fully qualified name, or a
-     * short name. If it is a full name, the namespace is ignored. If it is a short
-     * name, the namespace provided is used. If the namespace provided is null, the
-     * namespace context of this builder will be used.
-     * <p/>
-     * The name and namespace context rules are the same as the Avro schema JSON
-     * specification.
-     */
-    public GenericDefault<R> type(String name, String namespace) {
-      Schema schema = names().get(name, namespace);
-      return type(schema);
-    }
-
-    private FieldAssembler<R> completeField(Schema schema, Object defaultVal) {
-      JsonNode defaultNode = defaultVal == null ? NullNode.getInstance() : toJsonNode(defaultVal);
-      return completeField(schema, defaultNode);
-    }
-
-    private FieldAssembler<R> completeField(Schema schema) {
-      return completeField(schema, (JsonNode) null);
-    }
-
-    private FieldAssembler<R> completeField(Schema schema, JsonNode defaultVal) {
-      Field field = new Field(name(), schema, doc(), defaultVal, true, order);
-      addPropsTo(field);
-      addAliasesTo(field);
-      return fields.addField(field);
-    }
-
-    @Override
-    protected FieldBuilder<R> self() {
-      return this;
-    }
-  }
-
-  /** Abstract base class for field defaults. **/
-  public static abstract class FieldDefault<R, S extends FieldDefault<R, S>> extends Completion<S> {
-    private final FieldBuilder<R> field;
-    private Schema schema;
-
-    FieldDefault(FieldBuilder<R> field) {
-      this.field = field;
-    }
-
-    /** Completes this field with no default value **/
-    public final FieldAssembler<R> noDefault() {
-      return field.completeField(schema);
-    }
-
-    private FieldAssembler<R> usingDefault(Object defaultVal) {
-      return field.completeField(schema, defaultVal);
-    }
-
-    @Override
-    final S complete(Schema schema) {
-      this.schema = schema;
-      return self();
-    }
-
-    abstract S self();
-  }
-
-  /** Choose whether to use a default value for the field or not. **/
-  public static class FixedDefault<R> extends FieldDefault<R, FixedDefault<R>> {
-    private FixedDefault(FieldBuilder<R> field) {
-      super(field);
-    }
-
-    /** Completes this field with the default value provided, cannot be null **/
-    public final FieldAssembler<R> fixedDefault(byte[] defaultVal) {
-      return super.usingDefault(ByteBuffer.wrap(defaultVal));
-    }
-
-    /** Completes this field with the default value provided, cannot be null **/
-    public final FieldAssembler<R> fixedDefault(ByteBuffer defaultVal) {
-      return super.usingDefault(defaultVal);
-    }
-
-    /**
-     * Completes this field with the default value provided, cannot be null. The
-     * string is interpreted as a byte[], with each character code point value
-     * equalling the byte value, as in the Avro spec JSON default.
-     **/
-    public final FieldAssembler<R> fixedDefault(String defaultVal) {
-      return super.usingDefault(defaultVal);
-    }
-
-    @Override
-    final FixedDefault<R> self() {
-      return this;
-    }
-  }
-
-  public final static class GenericDefault<R> {
-    private final FieldBuilder<R> field;
-    private final Schema schema;
-
-    private GenericDefault(FieldBuilder<R> field, Schema schema) {
-      this.field = field;
-      this.schema = schema;
-    }
-
-    /** Do not use a default value for this field. **/
-    public FieldAssembler<R> noDefault() {
-      return field.completeField(schema);
-    }
-
-    /**
-     * Completes this field with the default value provided. The value must conform
-     * to the schema of the field.
-     **/
-    public FieldAssembler<R> withDefault(Object defaultVal) {
-      return field.completeField(schema, defaultVal);
-    }
-  }
 
   /**
    * Completion<R> is for internal builder use, all subclasses are private.
@@ -952,21 +529,6 @@ public class SchemaBuilder {
       // wrap the schema as a union of the schema and null
       Schema nullable = Schema.createUnion(Arrays.asList(schema, NULL_SCHEMA));
       return context.complete(nullable);
-    }
-  }
-
-  private static class OptionalCompletion<R> extends Completion<FieldAssembler<R>> {
-    private final FieldBuilder<R> bldr;
-
-    public OptionalCompletion(FieldBuilder<R> bldr) {
-      this.bldr = bldr;
-    }
-
-    @Override
-    protected FieldAssembler<R> complete(Schema schema) {
-      // wrap the schema as a union of null and the schema
-      Schema optional = Schema.createUnion(Arrays.asList(NULL_SCHEMA, schema));
-      return bldr.completeField(optional, (Object) null);
     }
   }
 
