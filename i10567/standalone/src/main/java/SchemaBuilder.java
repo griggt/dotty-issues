@@ -1,12 +1,7 @@
-package org.apache.avro;
+  package org.apache.avro;
 
-import java.io.IOException;
-import java.nio.Buffer;
-import java.nio.ByteBuffer;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -15,20 +10,14 @@ import java.util.Objects;
 import java.util.Set;
 
 import org.apache.avro.Schema.Field;
-import org.apache.avro.generic.GenericData;
-import org.apache.avro.generic.GenericRecord;
 import org.apache.avro.util.internal.JacksonUtils;
 
-import com.fasterxml.jackson.core.io.JsonStringEncoder;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.NullNode;
 import com.fasterxml.jackson.databind.node.TextNode;
 
 public class SchemaBuilder {
 
-  private SchemaBuilder() {
-  }
+  private SchemaBuilder() {}
 
   /**
    * Create a builder for Avro schemas.
@@ -390,115 +379,6 @@ public class SchemaBuilder {
     }
   }
 
-  public final static class FieldAssembler<R> {
-    private final List<Field> fields = new ArrayList<>();
-    private final Completion<R> context;
-    private final NameContext names;
-    private final Schema record;
-
-    private FieldAssembler(Completion<R> context, NameContext names, Schema record) {
-      this.context = context;
-      this.names = names;
-      this.record = record;
-    }
-
-    public FieldAssembler<R> requiredBoolean(String fieldName) {
-      throw new UnsupportedOperationException();
-    }
-
-    public FieldAssembler<R> optionalBoolean(String fieldName) {
-      throw new UnsupportedOperationException();
-    }
-
-    public FieldAssembler<R> nullableBoolean(String fieldName, boolean defaultVal) {
-      throw new UnsupportedOperationException();
-    }
-
-    public FieldAssembler<R> requiredInt(String fieldName) {
-      throw new UnsupportedOperationException();
-    }
-
-    public FieldAssembler<R> optionalInt(String fieldName) {
-      throw new UnsupportedOperationException();
-    }
-
-    public FieldAssembler<R> nullableInt(String fieldName, int defaultVal) {
-      throw new UnsupportedOperationException();
-    }
-
-    public FieldAssembler<R> requiredLong(String fieldName) {
-      throw new UnsupportedOperationException();
-    }
-
-    public FieldAssembler<R> optionalLong(String fieldName) {
-      throw new UnsupportedOperationException();
-    }
-
-    public FieldAssembler<R> nullableLong(String fieldName, long defaultVal) {
-      throw new UnsupportedOperationException();
-    }
-
-    public FieldAssembler<R> requiredFloat(String fieldName) {
-      throw new UnsupportedOperationException();
-    }
-
-    public FieldAssembler<R> optionalFloat(String fieldName) {
-      throw new UnsupportedOperationException();
-    }
-
-    public FieldAssembler<R> nullableFloat(String fieldName, float defaultVal) {
-      throw new UnsupportedOperationException();
-    }
-
-    public FieldAssembler<R> requiredDouble(String fieldName) {
-      throw new UnsupportedOperationException();
-    }
-
-    public FieldAssembler<R> optionalDouble(String fieldName) {
-      throw new UnsupportedOperationException();
-    }
-
-    public FieldAssembler<R> nullableDouble(String fieldName, double defaultVal) {
-      throw new UnsupportedOperationException();
-    }
-
-    public FieldAssembler<R> requiredString(String fieldName) {
-      throw new UnsupportedOperationException();
-    }
-
-    public FieldAssembler<R> optionalString(String fieldName) {
-      throw new UnsupportedOperationException();
-    }
-
-    public FieldAssembler<R> nullableString(String fieldName, String defaultVal) {
-      throw new UnsupportedOperationException();
-    }
-
-    public FieldAssembler<R> requiredBytes(String fieldName) {
-      throw new UnsupportedOperationException();
-    }
-
-    public FieldAssembler<R> optionalBytes(String fieldName) {
-      throw new UnsupportedOperationException();
-    }
-
-    public FieldAssembler<R> nullableBytes(String fieldName, byte[] defaultVal) {
-      throw new UnsupportedOperationException();
-    }
-
-    public R endRecord() {
-      record.setFields(fields);
-      return context.complete(record);
-    }
-
-    private FieldAssembler<R> addField(Field field) {
-      fields.add(field);
-      return this;
-    }
-
-  }
-
-
   /**
    * Completion<R> is for internal builder use, all subclasses are private.
    *
@@ -515,35 +395,6 @@ public class SchemaBuilder {
     }
   }
 
-  private static final Schema NULL_SCHEMA = Schema.create(Schema.Type.NULL);
-
-  private static class NullableCompletion<R> extends Completion<R> {
-    private final Completion<R> context;
-
-    private NullableCompletion(Completion<R> context) {
-      this.context = context;
-    }
-
-    @Override
-    protected R complete(Schema schema) {
-      // wrap the schema as a union of the schema and null
-      Schema nullable = Schema.createUnion(Arrays.asList(schema, NULL_SCHEMA));
-      return context.complete(nullable);
-    }
-  }
-
-  private abstract static class CompletionWrapper {
-    abstract <R> Completion<R> wrap(Completion<R> completion);
-  }
-
-  private static final class NullableCompletionWrapper extends CompletionWrapper {
-    @Override
-    <R> Completion<R> wrap(Completion<R> completion) {
-      return new NullableCompletion<>(completion);
-    }
-  }
-
-  // create default value JsonNodes from objects
   private static JsonNode toJsonNode(Object o) {
     throw new UnsupportedOperationException();
   }
