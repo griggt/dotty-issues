@@ -277,136 +277,6 @@ public class SchemaBuilder {
   }
 
   /**
-   * Builds an Avro Enum type with optional properties, namespace, doc, and
-   * aliases.
-   * <p/>
-   * Set properties with {@link #prop(String, String)}, namespace with
-   * {@link #namespace(String)}, doc with {@link #doc(String)}, and aliases with
-   * {@link #aliases(String[])}.
-   * <p/>
-   * The Enum schema is finalized when its required symbols are set via
-   * {@link #symbols(String[])}.
-   **/
-  public static final class EnumBuilder<R> extends NamespacedBuilder<R, EnumBuilder<R>> {
-    private EnumBuilder(Completion<R> context, NameContext names, String name) {
-      super(context, names, name);
-    }
-
-    private String enumDefault = null;
-
-    private static <R> EnumBuilder<R> create(Completion<R> context, NameContext names, String name) {
-      return new EnumBuilder<>(context, names, name);
-    }
-
-    @Override
-    protected EnumBuilder<R> self() {
-      return this;
-    }
-
-    /**
-     * Configure this enum type's symbols, and end its configuration. Populates the
-     * default if it was set.
-     **/
-    public R symbols(String... symbols) {
-      Schema schema = Schema.createEnum(name(), doc(), space(), Arrays.asList(symbols), this.enumDefault);
-      completeSchema(schema);
-      return context().complete(schema);
-    }
-
-    /** Set the default value of the enum. */
-    public EnumBuilder<R> defaultSymbol(String enumDefault) {
-      this.enumDefault = enumDefault;
-      return self();
-    }
-  }
-
-  /**
-   * Builds an Avro Map type with optional properties.
-   * <p/>
-   * Set properties with {@link #prop(String, String)}.
-   * <p/>
-   * The Map schema's properties are finalized when {@link #values()} or
-   * {@link #values(Schema)} is called.
-   **/
-  public static final class MapBuilder<R> extends PropBuilder<MapBuilder<R>> {
-    private final Completion<R> context;
-    private final NameContext names;
-
-    private MapBuilder(Completion<R> context, NameContext names) {
-      this.context = context;
-      this.names = names;
-    }
-
-    private static <R> MapBuilder<R> create(Completion<R> context, NameContext names) {
-      return new MapBuilder<>(context, names);
-    }
-
-    @Override
-    protected MapBuilder<R> self() {
-      return this;
-    }
-
-    /**
-     * Return a type builder for configuring the map's nested values schema. This
-     * builder will return control to the map's enclosing context when complete.
-     **/
-    public TypeBuilder<R> values() {
-      return new TypeBuilder<>(new MapCompletion<>(this, context), names);
-    }
-
-    /**
-     * Complete configuration of this map, setting the schema of the map values to
-     * the schema provided. Returns control to the enclosing context.
-     **/
-    public R values(Schema valueSchema) {
-      return new MapCompletion<>(this, context).complete(valueSchema);
-    }
-  }
-
-  /**
-   * Builds an Avro Array type with optional properties.
-   * <p/>
-   * Set properties with {@link #prop(String, String)}.
-   * <p/>
-   * The Array schema's properties are finalized when {@link #items()} or
-   * {@link #items(Schema)} is called.
-   **/
-  public static final class ArrayBuilder<R> extends PropBuilder<ArrayBuilder<R>> {
-    private final Completion<R> context;
-    private final NameContext names;
-
-    public ArrayBuilder(Completion<R> context, NameContext names) {
-      this.context = context;
-      this.names = names;
-    }
-
-    private static <R> ArrayBuilder<R> create(Completion<R> context, NameContext names) {
-      return new ArrayBuilder<>(context, names);
-    }
-
-    @Override
-    protected ArrayBuilder<R> self() {
-      return this;
-    }
-
-    /**
-     * Return a type builder for configuring the array's nested items schema. This
-     * builder will return control to the array's enclosing context when complete.
-     **/
-    public TypeBuilder<R> items() {
-      return new TypeBuilder<>(new ArrayCompletion<>(this, context), names);
-    }
-
-    /**
-     * Complete configuration of this array, setting the schema of the array items
-     * to the schema provided. Returns control to the enclosing context.
-     **/
-    public R items(Schema itemsSchema) {
-      return new ArrayCompletion<>(this, context).complete(itemsSchema);
-    }
-  }
-
-  /**
    * internal class for passing the naming context around. This allows for the
    * following:
    * <li>Cache and re-use primitive schemas when they do not set properties.</li>
@@ -560,40 +430,6 @@ public class SchemaBuilder {
     }
 
     /**
-     * Build an Avro map type Example usage:
-     *
-     * <pre>
-     * map().values().intType()
-     * </pre>
-     *
-     * Equivalent to Avro JSON Schema:
-     *
-     * <pre>
-     * {"type":"map", "values":"int"}
-     * </pre>
-     **/
-    public final MapBuilder<R> map() {
-      return MapBuilder.create(context, names);
-    }
-
-    /**
-     * Build an Avro array type Example usage:
-     *
-     * <pre>
-     * array().items().longType()
-     * </pre>
-     *
-     * Equivalent to Avro JSON Schema:
-     *
-     * <pre>
-     * {"type":"array", "values":"long"}
-     * </pre>
-     **/
-    public final ArrayBuilder<R> array() {
-      return ArrayBuilder.create(context, names);
-    }
-
-    /**
      * Build an Avro fixed type. Example usage:
      *
      * <pre>
@@ -608,50 +444,6 @@ public class SchemaBuilder {
      **/
     public final FixedBuilder<R> fixed(String name) {
       return FixedBuilder.create(context, names, name);
-    }
-
-    /**
-     * Build an Avro enum type. Example usage:
-     *
-     * <pre>
-     * enumeration("Suits").namespace("org.cards").doc("card suit names").defaultSymbol("HEART").symbols("HEART", "SPADE",
-     *     "DIAMOND", "CLUB")
-     * </pre>
-     *
-     * Equivalent to Avro JSON Schema:
-     *
-     * <pre>
-     * {"type":"enum", "name":"Suits", "namespace":"org.cards",
-     *  "doc":"card suit names", "symbols":[
-     *    "HEART", "SPADE", "DIAMOND", "CLUB"], "default":"HEART"}
-     * </pre>
-     **/
-    public final EnumBuilder<R> enumeration(String name) {
-      return EnumBuilder.create(context, names, name);
-    }
-
-    /**
-     * Build an Avro record type. Example usage:
-     *
-     * <pre>
-     * record("com.foo.Foo").fields().name("field1").typeInt().intDefault(1).name("field2").typeString().noDefault()
-     *     .name("field3").optional().typeFixed("FooFixed").size(4).endRecord()
-     * </pre>
-     *
-     * Equivalent to Avro JSON Schema:
-     *
-     * <pre>
-     * {"type":"record", "name":"com.foo.Foo", "fields": [
-     *   {"name":"field1", "type":"int", "default":1},
-     *   {"name":"field2", "type":"string"},
-     *   {"name":"field3", "type":[
-     *     null, {"type":"fixed", "name":"FooFixed", "size":4}
-     *     ]}
-     *   ]}
-     * </pre>
-     **/
-    public final RecordBuilder<R> record(String name) {
-      return RecordBuilder.create(context, names, name);
     }
 
     /**
@@ -769,29 +561,9 @@ public class SchemaBuilder {
       return StringBldr.create(wrap(new StringDefault<>(bldr)), names);
     }
 
-    /** Build an Avro map type **/
-    public final MapBuilder<MapDefault<R>> map() {
-      return MapBuilder.create(wrap(new MapDefault<>(bldr)), names);
-    }
-
-    /** Build an Avro array type **/
-    public final ArrayBuilder<ArrayDefault<R>> array() {
-      return ArrayBuilder.create(wrap(new ArrayDefault<>(bldr)), names);
-    }
-
     /** Build an Avro fixed type. **/
     public final FixedBuilder<FixedDefault<R>> fixed(String name) {
       return FixedBuilder.create(wrap(new FixedDefault<>(bldr)), names, name);
-    }
-
-    /** Build an Avro enum type. **/
-    public final EnumBuilder<EnumDefault<R>> enumeration(String name) {
-      return EnumBuilder.create(wrap(new EnumDefault<>(bldr)), names, name);
-    }
-
-    /** Build an Avro record type. **/
-    public final RecordBuilder<RecordDefault<R>> record(String name) {
-      return RecordBuilder.create(wrap(new RecordDefault<>(bldr)), names, name);
     }
 
     private <C> Completion<C> wrap(Completion<C> completion) {
@@ -884,55 +656,13 @@ public class SchemaBuilder {
       return StringBldr.create(completion(new StringDefault<>(bldr)), names);
     }
 
-    /** Build an Avro map type **/
-    public MapBuilder<UnionAccumulator<MapDefault<R>>> map() {
-      return MapBuilder.create(completion(new MapDefault<>(bldr)), names);
-    }
-
-    /** Build an Avro array type **/
-    public ArrayBuilder<UnionAccumulator<ArrayDefault<R>>> array() {
-      return ArrayBuilder.create(completion(new ArrayDefault<>(bldr)), names);
-    }
-
     /** Build an Avro fixed type. **/
     public FixedBuilder<UnionAccumulator<FixedDefault<R>>> fixed(String name) {
       return FixedBuilder.create(completion(new FixedDefault<>(bldr)), names, name);
     }
 
-    /** Build an Avro enum type. **/
-    public EnumBuilder<UnionAccumulator<EnumDefault<R>>> enumeration(String name) {
-      return EnumBuilder.create(completion(new EnumDefault<>(bldr)), names, name);
-    }
-
-    /** Build an Avro record type. **/
-    public RecordBuilder<UnionAccumulator<RecordDefault<R>>> record(String name) {
-      return RecordBuilder.create(completion(new RecordDefault<>(bldr)), names, name);
-    }
-
     private <C> UnionCompletion<C> completion(Completion<C> context) {
       return new UnionCompletion<>(context, names, Collections.emptyList());
-    }
-  }
-
-  public final static class RecordBuilder<R> extends NamespacedBuilder<R, RecordBuilder<R>> {
-    private RecordBuilder(Completion<R> context, NameContext names, String name) {
-      super(context, names, name);
-    }
-
-    private static <R> RecordBuilder<R> create(Completion<R> context, NameContext names, String name) {
-      return new RecordBuilder<>(context, names, name);
-    }
-
-    @Override
-    protected RecordBuilder<R> self() {
-      return this;
-    }
-
-    public FieldAssembler<R> fields() {
-      Schema record = Schema.createRecord(name(), doc(), space(), false);
-      // place the record in the name context, fields yet to be set.
-      completeSchema(record);
-      return new FieldAssembler<>(context(), names().namespace(record.getNamespace()), record);
     }
   }
 
@@ -1749,28 +1479,6 @@ public class SchemaBuilder {
     }
 
     protected abstract Schema outerSchema(Schema inner);
-  }
-
-  private static class MapCompletion<R> extends NestedCompletion<R> {
-    private MapCompletion(MapBuilder<R> assembler, Completion<R> context) {
-      super(assembler, context);
-    }
-
-    @Override
-    protected Schema outerSchema(Schema inner) {
-      return Schema.createMap(inner);
-    }
-  }
-
-  private static class ArrayCompletion<R> extends NestedCompletion<R> {
-    private ArrayCompletion(ArrayBuilder<R> assembler, Completion<R> context) {
-      super(assembler, context);
-    }
-
-    @Override
-    protected Schema outerSchema(Schema inner) {
-      return Schema.createArray(inner);
-    }
   }
 
   private static class UnionCompletion<R> extends Completion<UnionAccumulator<R>> {
