@@ -1,5 +1,3 @@
-//package org.apache.avro;
-
 public class SchemaBuilder {
   public static class Schema {}
 
@@ -7,9 +5,7 @@ public class SchemaBuilder {
     throw new UnsupportedOperationException();
   }
 
-  public static class NamedBuilder<S extends NamedBuilder<S>> {}
-
-  public static class NamespacedBuilder<R, S extends NamespacedBuilder<R, S>> extends NamedBuilder<S> {}
+  public static class NamespacedBuilder<R, S extends NamespacedBuilder<R, S>> {}
 
   public static class FixedBuilder<R> extends NamespacedBuilder<R, FixedBuilder<R>> {}
 
