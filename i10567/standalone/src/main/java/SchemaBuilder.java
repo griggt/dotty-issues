@@ -218,125 +218,6 @@ public class SchemaBuilder {
     }
   }
 
-  /**
-   * Builds an Avro boolean type with optional properties. Set properties with
-   * {@link #prop(String, String)}, and finalize with {@link #endBoolean()}
-   **/
-  public static final class BooleanBuilder<R> extends PrimitiveBuilder<R, BooleanBuilder<R>> {
-    private BooleanBuilder(Completion<R> context, NameContext names) {
-      super(context, names, Schema.Type.BOOLEAN);
-    }
-
-    private static <R> BooleanBuilder<R> create(Completion<R> context, NameContext names) {
-      return new BooleanBuilder<>(context, names);
-    }
-
-    @Override
-    protected BooleanBuilder<R> self() {
-      return this;
-    }
-
-    /** complete building this type, return control to context **/
-    public R endBoolean() {
-      return super.end();
-    }
-  }
-
-  /**
-   * Builds an Avro int type with optional properties. Set properties with
-   * {@link #prop(String, String)}, and finalize with {@link #endInt()}
-   **/
-  public static final class IntBuilder<R> extends PrimitiveBuilder<R, IntBuilder<R>> {
-    private IntBuilder(Completion<R> context, NameContext names) {
-      super(context, names, Schema.Type.INT);
-    }
-
-    private static <R> IntBuilder<R> create(Completion<R> context, NameContext names) {
-      return new IntBuilder<>(context, names);
-    }
-
-    @Override
-    protected IntBuilder<R> self() {
-      return this;
-    }
-
-    /** complete building this type, return control to context **/
-    public R endInt() {
-      return super.end();
-    }
-  }
-
-  /**
-   * Builds an Avro long type with optional properties. Set properties with
-   * {@link #prop(String, String)}, and finalize with {@link #endLong()}
-   **/
-  public static final class LongBuilder<R> extends PrimitiveBuilder<R, LongBuilder<R>> {
-    private LongBuilder(Completion<R> context, NameContext names) {
-      super(context, names, Schema.Type.LONG);
-    }
-
-    private static <R> LongBuilder<R> create(Completion<R> context, NameContext names) {
-      return new LongBuilder<>(context, names);
-    }
-
-    @Override
-    protected LongBuilder<R> self() {
-      return this;
-    }
-
-    /** complete building this type, return control to context **/
-    public R endLong() {
-      return super.end();
-    }
-  }
-
-  /**
-   * Builds an Avro float type with optional properties. Set properties with
-   * {@link #prop(String, String)}, and finalize with {@link #endFloat()}
-   **/
-  public static final class FloatBuilder<R> extends PrimitiveBuilder<R, FloatBuilder<R>> {
-    private FloatBuilder(Completion<R> context, NameContext names) {
-      super(context, names, Schema.Type.FLOAT);
-    }
-
-    private static <R> FloatBuilder<R> create(Completion<R> context, NameContext names) {
-      return new FloatBuilder<>(context, names);
-    }
-
-    @Override
-    protected FloatBuilder<R> self() {
-      return this;
-    }
-
-    /** complete building this type, return control to context **/
-    public R endFloat() {
-      return super.end();
-    }
-  }
-
-  /**
-   * Builds an Avro double type with optional properties. Set properties with
-   * {@link #prop(String, String)}, and finalize with {@link #endDouble()}
-   **/
-  public static final class DoubleBuilder<R> extends PrimitiveBuilder<R, DoubleBuilder<R>> {
-    private DoubleBuilder(Completion<R> context, NameContext names) {
-      super(context, names, Schema.Type.DOUBLE);
-    }
-
-    private static <R> DoubleBuilder<R> create(Completion<R> context, NameContext names) {
-      return new DoubleBuilder<>(context, names);
-    }
-
-    @Override
-    protected DoubleBuilder<R> self() {
-      return this;
-    }
-
-    /** complete building this type, return control to context **/
-    public R endDouble() {
-      return super.end();
-    }
-  }
 
   /**
    * Builds an Avro string type with optional properties. Set properties with
@@ -358,54 +239,6 @@ public class SchemaBuilder {
 
     /** complete building this type, return control to context **/
     public R endString() {
-      return super.end();
-    }
-  }
-
-  /**
-   * Builds an Avro bytes type with optional properties. Set properties with
-   * {@link #prop(String, String)}, and finalize with {@link #endBytes()}
-   **/
-  public static final class BytesBuilder<R> extends PrimitiveBuilder<R, BytesBuilder<R>> {
-    private BytesBuilder(Completion<R> context, NameContext names) {
-      super(context, names, Schema.Type.BYTES);
-    }
-
-    private static <R> BytesBuilder<R> create(Completion<R> context, NameContext names) {
-      return new BytesBuilder<>(context, names);
-    }
-
-    @Override
-    protected BytesBuilder<R> self() {
-      return this;
-    }
-
-    /** complete building this type, return control to context **/
-    public R endBytes() {
-      return super.end();
-    }
-  }
-
-  /**
-   * Builds an Avro null type with optional properties. Set properties with
-   * {@link #prop(String, String)}, and finalize with {@link #endNull()}
-   **/
-  public static final class NullBuilder<R> extends PrimitiveBuilder<R, NullBuilder<R>> {
-    private NullBuilder(Completion<R> context, NameContext names) {
-      super(context, names, Schema.Type.NULL);
-    }
-
-    private static <R> NullBuilder<R> create(Completion<R> context, NameContext names) {
-      return new NullBuilder<>(context, names);
-    }
-
-    @Override
-    protected NullBuilder<R> self() {
-      return this;
-    }
-
-    /** complete building this type, return control to context **/
-    public R endNull() {
       return super.end();
     }
   }
@@ -707,83 +540,6 @@ public class SchemaBuilder {
       return type(names.get(name, namespace));
     }
 
-
-    /**
-     * A plain int type without custom properties. This is equivalent to:
-     *
-     * <pre>
-     * intBuilder().endInt();
-     * </pre>
-     */
-    public final R intType() {
-      return intBuilder().endInt();
-    }
-
-    /**
-     * Build an int type that can set custom properties. If custom properties are
-     * not needed it is simpler to use {@link #intType()}.
-     */
-    public final IntBuilder<R> intBuilder() {
-      return IntBuilder.create(context, names);
-    }
-
-    /**
-     * A plain long type without custom properties. This is equivalent to:
-     *
-     * <pre>
-     * longBuilder().endLong();
-     * </pre>
-     */
-    public final R longType() {
-      return longBuilder().endLong();
-    }
-
-    /**
-     * Build a long type that can set custom properties. If custom properties are
-     * not needed it is simpler to use {@link #longType()}.
-     */
-    public final LongBuilder<R> longBuilder() {
-      return LongBuilder.create(context, names);
-    }
-
-    /**
-     * A plain float type without custom properties. This is equivalent to:
-     *
-     * <pre>
-     * floatBuilder().endFloat();
-     * </pre>
-     */
-    public final R floatType() {
-      return floatBuilder().endFloat();
-    }
-
-    /**
-     * Build a float type that can set custom properties. If custom properties are
-     * not needed it is simpler to use {@link #floatType()}.
-     */
-    public final FloatBuilder<R> floatBuilder() {
-      return FloatBuilder.create(context, names);
-    }
-
-    /**
-     * A plain double type without custom properties. This is equivalent to:
-     *
-     * <pre>
-     * doubleBuilder().endDouble();
-     * </pre>
-     */
-    public final R doubleType() {
-      return doubleBuilder().endDouble();
-    }
-
-    /**
-     * Build a double type that can set custom properties. If custom properties are
-     * not needed it is simpler to use {@link #doubleType()}.
-     */
-    public final DoubleBuilder<R> doubleBuilder() {
-      return DoubleBuilder.create(context, names);
-    }
-
     /**
      * A plain string type without custom properties. This is equivalent to:
      *
@@ -801,44 +557,6 @@ public class SchemaBuilder {
      */
     public final StringBldr<R> stringBuilder() {
       return StringBldr.create(context, names);
-    }
-
-    /**
-     * A plain bytes type without custom properties. This is equivalent to:
-     *
-     * <pre>
-     * bytesBuilder().endBytes();
-     * </pre>
-     */
-    public final R bytesType() {
-      return bytesBuilder().endBytes();
-    }
-
-    /**
-     * Build a bytes type that can set custom properties. If custom properties are
-     * not needed it is simpler to use {@link #bytesType()}.
-     */
-    public final BytesBuilder<R> bytesBuilder() {
-      return BytesBuilder.create(context, names);
-    }
-
-    /**
-     * A plain null type without custom properties. This is equivalent to:
-     *
-     * <pre>
-     * nullBuilder().endNull();
-     * </pre>
-     */
-    public final R nullType() {
-      return nullBuilder().endNull();
-    }
-
-    /**
-     * Build a null type that can set custom properties. If custom properties are
-     * not needed it is simpler to use {@link #nullType()}.
-     */
-    public final NullBuilder<R> nullBuilder() {
-      return NullBuilder.create(context, names);
     }
 
     /**
@@ -1033,82 +751,6 @@ public class SchemaBuilder {
     }
 
     /**
-     * A plain int type without custom properties. This is equivalent to:
-     *
-     * <pre>
-     * intBuilder().endInt();
-     * </pre>
-     */
-    public final IntDefault<R> intType() {
-      return intBuilder().endInt();
-    }
-
-    /**
-     * Build an int type that can set custom properties. If custom properties are
-     * not needed it is simpler to use {@link #intType()}.
-     */
-    public final IntBuilder<IntDefault<R>> intBuilder() {
-      return IntBuilder.create(wrap(new IntDefault<>(bldr)), names);
-    }
-
-    /**
-     * A plain long type without custom properties. This is equivalent to:
-     *
-     * <pre>
-     * longBuilder().endLong();
-     * </pre>
-     */
-    public final LongDefault<R> longType() {
-      return longBuilder().endLong();
-    }
-
-    /**
-     * Build a long type that can set custom properties. If custom properties are
-     * not needed it is simpler to use {@link #longType()}.
-     */
-    public final LongBuilder<LongDefault<R>> longBuilder() {
-      return LongBuilder.create(wrap(new LongDefault<>(bldr)), names);
-    }
-
-    /**
-     * A plain float type without custom properties. This is equivalent to:
-     *
-     * <pre>
-     * floatBuilder().endFloat();
-     * </pre>
-     */
-    public final FloatDefault<R> floatType() {
-      return floatBuilder().endFloat();
-    }
-
-    /**
-     * Build a float type that can set custom properties. If custom properties are
-     * not needed it is simpler to use {@link #floatType()}.
-     */
-    public final FloatBuilder<FloatDefault<R>> floatBuilder() {
-      return FloatBuilder.create(wrap(new FloatDefault<>(bldr)), names);
-    }
-
-    /**
-     * A plain double type without custom properties. This is equivalent to:
-     *
-     * <pre>
-     * doubleBuilder().endDouble();
-     * </pre>
-     */
-    public final DoubleDefault<R> doubleType() {
-      return doubleBuilder().endDouble();
-    }
-
-    /**
-     * Build a double type that can set custom properties. If custom properties are
-     * not needed it is simpler to use {@link #doubleType()}.
-     */
-    public final DoubleBuilder<DoubleDefault<R>> doubleBuilder() {
-      return DoubleBuilder.create(wrap(new DoubleDefault<>(bldr)), names);
-    }
-
-    /**
      * A plain string type without custom properties. This is equivalent to:
      *
      * <pre>
@@ -1125,44 +767,6 @@ public class SchemaBuilder {
      */
     public final StringBldr<StringDefault<R>> stringBuilder() {
       return StringBldr.create(wrap(new StringDefault<>(bldr)), names);
-    }
-
-    /**
-     * A plain bytes type without custom properties. This is equivalent to:
-     *
-     * <pre>
-     * bytesBuilder().endBytes();
-     * </pre>
-     */
-    public final BytesDefault<R> bytesType() {
-      return bytesBuilder().endBytes();
-    }
-
-    /**
-     * Build a bytes type that can set custom properties. If custom properties are
-     * not needed it is simpler to use {@link #bytesType()}.
-     */
-    public final BytesBuilder<BytesDefault<R>> bytesBuilder() {
-      return BytesBuilder.create(wrap(new BytesDefault<>(bldr)), names);
-    }
-
-    /**
-     * A plain null type without custom properties. This is equivalent to:
-     *
-     * <pre>
-     * nullBuilder().endNull();
-     * </pre>
-     */
-    public final NullDefault<R> nullType() {
-      return nullBuilder().endNull();
-    }
-
-    /**
-     * Build a null type that can set custom properties. If custom properties are
-     * not needed it is simpler to use {@link #nullType()}.
-     */
-    public final NullBuilder<NullDefault<R>> nullBuilder() {
-      return NullBuilder.create(wrap(new NullDefault<>(bldr)), names);
     }
 
     /** Build an Avro map type **/
@@ -1261,83 +865,6 @@ public class SchemaBuilder {
       this.names = bldr.names();
     }
 
-
-    /**
-     * A plain int type without custom properties. This is equivalent to:
-     *
-     * <pre>
-     * intBuilder().endInt();
-     * </pre>
-     */
-    public UnionAccumulator<IntDefault<R>> intType() {
-      return intBuilder().endInt();
-    }
-
-    /**
-     * Build an int type that can set custom properties. If custom properties are
-     * not needed it is simpler to use {@link #intType()}.
-     */
-    public IntBuilder<UnionAccumulator<IntDefault<R>>> intBuilder() {
-      return IntBuilder.create(completion(new IntDefault<>(bldr)), names);
-    }
-
-    /**
-     * A plain long type without custom properties. This is equivalent to:
-     *
-     * <pre>
-     * longBuilder().endLong();
-     * </pre>
-     */
-    public UnionAccumulator<LongDefault<R>> longType() {
-      return longBuilder().endLong();
-    }
-
-    /**
-     * Build a long type that can set custom properties. If custom properties are
-     * not needed it is simpler to use {@link #longType()}.
-     */
-    public LongBuilder<UnionAccumulator<LongDefault<R>>> longBuilder() {
-      return LongBuilder.create(completion(new LongDefault<>(bldr)), names);
-    }
-
-    /**
-     * A plain float type without custom properties. This is equivalent to:
-     *
-     * <pre>
-     * floatBuilder().endFloat();
-     * </pre>
-     */
-    public UnionAccumulator<FloatDefault<R>> floatType() {
-      return floatBuilder().endFloat();
-    }
-
-    /**
-     * Build a float type that can set custom properties. If custom properties are
-     * not needed it is simpler to use {@link #floatType()}.
-     */
-    public FloatBuilder<UnionAccumulator<FloatDefault<R>>> floatBuilder() {
-      return FloatBuilder.create(completion(new FloatDefault<>(bldr)), names);
-    }
-
-    /**
-     * A plain double type without custom properties. This is equivalent to:
-     *
-     * <pre>
-     * doubleBuilder().endDouble();
-     * </pre>
-     */
-    public UnionAccumulator<DoubleDefault<R>> doubleType() {
-      return doubleBuilder().endDouble();
-    }
-
-    /**
-     * Build a double type that can set custom properties. If custom properties are
-     * not needed it is simpler to use {@link #doubleType()}.
-     */
-    public DoubleBuilder<UnionAccumulator<DoubleDefault<R>>> doubleBuilder() {
-      return DoubleBuilder.create(completion(new DoubleDefault<>(bldr)), names);
-    }
-
     /**
      * A plain string type without custom properties. This is equivalent to:
      *
@@ -1355,44 +882,6 @@ public class SchemaBuilder {
      */
     public StringBldr<UnionAccumulator<StringDefault<R>>> stringBuilder() {
       return StringBldr.create(completion(new StringDefault<>(bldr)), names);
-    }
-
-    /**
-     * A plain bytes type without custom properties. This is equivalent to:
-     *
-     * <pre>
-     * bytesBuilder().endBytes();
-     * </pre>
-     */
-    public UnionAccumulator<BytesDefault<R>> bytesType() {
-      return bytesBuilder().endBytes();
-    }
-
-    /**
-     * Build a bytes type that can set custom properties. If custom properties are
-     * not needed it is simpler to use {@link #bytesType()}.
-     */
-    public BytesBuilder<UnionAccumulator<BytesDefault<R>>> bytesBuilder() {
-      return BytesBuilder.create(completion(new BytesDefault<>(bldr)), names);
-    }
-
-    /**
-     * A plain null type without custom properties. This is equivalent to:
-     *
-     * <pre>
-     * nullBuilder().endNull();
-     * </pre>
-     */
-    public UnionAccumulator<NullDefault<R>> nullType() {
-      return nullBuilder().endNull();
-    }
-
-    /**
-     * Build a null type that can set custom properties. If custom properties are
-     * not needed it is simpler to use {@link #nullType()}.
-     */
-    public NullBuilder<UnionAccumulator<NullDefault<R>>> nullBuilder() {
-      return NullBuilder.create(completion(new NullDefault<>(bldr)), names);
     }
 
     /** Build an Avro map type **/
@@ -1519,7 +1008,7 @@ public class SchemaBuilder {
      * </pre>
      */
     public FieldAssembler<R> requiredInt(String fieldName) {
-      return name(fieldName).type().intType().noDefault();
+      throw new UnsupportedOperationException();
     }
 
     /**
@@ -1533,7 +1022,7 @@ public class SchemaBuilder {
      * </pre>
      */
     public FieldAssembler<R> optionalInt(String fieldName) {
-      return name(fieldName).type().optional().intType();
+      throw new UnsupportedOperationException();
     }
 
     /**
@@ -1547,7 +1036,7 @@ public class SchemaBuilder {
      * </pre>
      */
     public FieldAssembler<R> nullableInt(String fieldName, int defaultVal) {
-      return name(fieldName).type().nullable().intType().intDefault(defaultVal);
+      throw new UnsupportedOperationException();
     }
 
     /**
@@ -1560,7 +1049,7 @@ public class SchemaBuilder {
      * </pre>
      */
     public FieldAssembler<R> requiredLong(String fieldName) {
-      return name(fieldName).type().longType().noDefault();
+      throw new UnsupportedOperationException();
     }
 
     /**
@@ -1574,7 +1063,7 @@ public class SchemaBuilder {
      * </pre>
      */
     public FieldAssembler<R> optionalLong(String fieldName) {
-      return name(fieldName).type().optional().longType();
+      throw new UnsupportedOperationException();
     }
 
     /**
@@ -1588,7 +1077,7 @@ public class SchemaBuilder {
      * </pre>
      */
     public FieldAssembler<R> nullableLong(String fieldName, long defaultVal) {
-      return name(fieldName).type().nullable().longType().longDefault(defaultVal);
+      throw new UnsupportedOperationException();
     }
 
     /**
@@ -1601,7 +1090,7 @@ public class SchemaBuilder {
      * </pre>
      */
     public FieldAssembler<R> requiredFloat(String fieldName) {
-      return name(fieldName).type().floatType().noDefault();
+      throw new UnsupportedOperationException();
     }
 
     /**
@@ -1615,7 +1104,7 @@ public class SchemaBuilder {
      * </pre>
      */
     public FieldAssembler<R> optionalFloat(String fieldName) {
-      return name(fieldName).type().optional().floatType();
+      throw new UnsupportedOperationException();
     }
 
     /**
@@ -1629,7 +1118,7 @@ public class SchemaBuilder {
      * </pre>
      */
     public FieldAssembler<R> nullableFloat(String fieldName, float defaultVal) {
-      return name(fieldName).type().nullable().floatType().floatDefault(defaultVal);
+      throw new UnsupportedOperationException();
     }
 
     /**
@@ -1642,7 +1131,7 @@ public class SchemaBuilder {
      * </pre>
      */
     public FieldAssembler<R> requiredDouble(String fieldName) {
-      return name(fieldName).type().doubleType().noDefault();
+      throw new UnsupportedOperationException();
     }
 
     /**
@@ -1656,7 +1145,7 @@ public class SchemaBuilder {
      * </pre>
      */
     public FieldAssembler<R> optionalDouble(String fieldName) {
-      return name(fieldName).type().optional().doubleType();
+      throw new UnsupportedOperationException();
     }
 
     /**
@@ -1670,7 +1159,7 @@ public class SchemaBuilder {
      * </pre>
      */
     public FieldAssembler<R> nullableDouble(String fieldName, double defaultVal) {
-      return name(fieldName).type().nullable().doubleType().doubleDefault(defaultVal);
+      throw new UnsupportedOperationException();
     }
 
     /**
@@ -1724,7 +1213,7 @@ public class SchemaBuilder {
      * </pre>
      */
     public FieldAssembler<R> requiredBytes(String fieldName) {
-      return name(fieldName).type().bytesType().noDefault();
+      throw new UnsupportedOperationException();
     }
 
     /**
@@ -1738,7 +1227,7 @@ public class SchemaBuilder {
      * </pre>
      */
     public FieldAssembler<R> optionalBytes(String fieldName) {
-      return name(fieldName).type().optional().bytesType();
+      throw new UnsupportedOperationException();
     }
 
     /**
@@ -1752,7 +1241,7 @@ public class SchemaBuilder {
      * </pre>
      */
     public FieldAssembler<R> nullableBytes(String fieldName, byte[] defaultVal) {
-      return name(fieldName).type().nullable().bytesType().bytesDefault(defaultVal);
+      throw new UnsupportedOperationException();
     }
 
     /**
