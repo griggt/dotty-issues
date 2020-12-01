@@ -1,30 +1,12 @@
 package org.apache.avro;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import org.apache.avro.Schema.Field;
-
-import com.fasterxml.jackson.databind.JsonNode;
-
 public class SchemaBuilder {
-
   private SchemaBuilder() {}
 
-  /**
-   * Create a builder for Avro schemas.
-   */
   public static TypeBuilder<Schema> builder() {
-    return new TypeBuilder<>(new SchemaCompletion(), new NameContext());
+    throw new UnsupportedOperationException();
   }
 
-  /**
-   * An abstract builder for all Avro types. All Avro types can have arbitrary
-   * string key-value properties.
-   */
   public static abstract class PropBuilder<S extends PropBuilder<S>> {
     protected PropBuilder() {}
 
@@ -35,45 +17,14 @@ public class SchemaBuilder {
     public final S prop(String name, Object value) {
       throw new UnsupportedOperationException();
     }
-
-    final S prop(String name, JsonNode val) {
-      throw new UnsupportedOperationException();
-    }
-
-    private boolean hasProps() {
-      throw new UnsupportedOperationException();
-    }
-
-    final <T extends JsonProperties> T addPropsTo(T jsonable) {
-      throw new UnsupportedOperationException();
-    }
-
-    /**
-     * a self-type for chaining builder subclasses. Concrete subclasses must return
-     * 'this'
-     **/
-    protected abstract S self();
   }
 
-  /**
-   * An abstract type that provides builder methods for configuring the name, doc,
-   * and aliases of all Avro types that have names (fields, Fixed, Record, and
-   * Enum).
-   * <p/>
-   * All Avro named types and fields have 'doc', 'aliases', and 'name' components.
-   * 'name' is required, and provided to this builder. 'doc' and 'aliases' are
-   * optional.
-   */
   public static abstract class NamedBuilder<S extends NamedBuilder<S>> extends PropBuilder<S> {
     protected NamedBuilder(NameContext names, String name) {
       throw new UnsupportedOperationException();
     }
 
     public final S doc(String doc) {
-      throw new UnsupportedOperationException();
-    }
-
-    public final S aliases(String... aliases) {
       throw new UnsupportedOperationException();
     }
 
@@ -88,34 +39,14 @@ public class SchemaBuilder {
     final NameContext names() {
       throw new UnsupportedOperationException();
     }
-
-    final Schema addAliasesTo(Schema schema) {
-      throw new UnsupportedOperationException();
-    }
-
-    final Field addAliasesTo(Field field) {
-      throw new UnsupportedOperationException();
-    }
   }
 
-  /**
-   * An abstract type that provides builder methods for configuring the namespace
-   * for all Avro types that have namespaces (Fixed, Record, and Enum).
-   */
   public static abstract class NamespacedBuilder<R, S extends NamespacedBuilder<R, S>> extends NamedBuilder<S> {
     protected NamespacedBuilder(Completion<R> context, NameContext names, String name) {
       super(names, name);
     }
 
-    public final S namespace(String namespace) {
-      throw new UnsupportedOperationException();
-    }
-
     final String space() {
-      throw new UnsupportedOperationException();
-    }
-
-    final Schema completeSchema(Schema schema) {
       throw new UnsupportedOperationException();
     }
 
@@ -128,196 +59,60 @@ public class SchemaBuilder {
     private FixedBuilder(Completion<R> context, NameContext names, String name) {
       super(context, names, name);
     }
+  }
 
-    private static <R> FixedBuilder<R> create(Completion<R> context, NameContext names, String name) {
-      return new FixedBuilder<>(context, names, name);
+  private static class NameContext {
+    private NameContext() {}
+
+    private NameContext namespace(String namespace) {
+      throw new UnsupportedOperationException();
     }
 
-    @Override
-    protected FixedBuilder<R> self() {
-      return this;
+    private Schema get(String name, String namespace) {
+      throw new UnsupportedOperationException();
     }
 
-    public R size(int size) {
+    private Schema getFullname(String fullName) {
+      throw new UnsupportedOperationException();
+    }
+
+    private void put(Schema schema) {
+      throw new UnsupportedOperationException();
+    }
+
+    private String resolveName(String name, String space) {
       throw new UnsupportedOperationException();
     }
   }
 
-  /**
-   * internal class for passing the naming context around. This allows for the
-   * following:
-   * <li>Cache and re-use primitive schemas when they do not set properties.</li>
-   * <li>Provide a default namespace for nested contexts (as the JSON Schema spec
-   * does).</li>
-   * <li>Allow previously defined named types or primitive types to be referenced
-   * by name.</li>
-   **/
-  private static class NameContext {
-    private static final Set<String> PRIMITIVES = new HashSet<>();
-    static {
-      PRIMITIVES.add("null");
-      PRIMITIVES.add("boolean");
-      PRIMITIVES.add("int");
-      PRIMITIVES.add("long");
-      PRIMITIVES.add("float");
-      PRIMITIVES.add("double");
-      PRIMITIVES.add("bytes");
-      PRIMITIVES.add("string");
-    }
-    private final HashMap<String, Schema> schemas;
-    private final String namespace;
-
-    private NameContext() {
-      this.schemas = new HashMap<>();
-      this.namespace = null;
-      schemas.put("null", Schema.create(Schema.Type.NULL));
-      schemas.put("boolean", Schema.create(Schema.Type.BOOLEAN));
-      schemas.put("int", Schema.create(Schema.Type.INT));
-      schemas.put("long", Schema.create(Schema.Type.LONG));
-      schemas.put("float", Schema.create(Schema.Type.FLOAT));
-      schemas.put("double", Schema.create(Schema.Type.DOUBLE));
-      schemas.put("bytes", Schema.create(Schema.Type.BYTES));
-      schemas.put("string", Schema.create(Schema.Type.STRING));
-    }
-
-    private NameContext(HashMap<String, Schema> schemas, String namespace) {
-      this.schemas = schemas;
-      this.namespace = "".equals(namespace) ? null : namespace;
-    }
-
-    private NameContext namespace(String namespace) {
-      return new NameContext(schemas, namespace);
-    }
-
-    private Schema get(String name, String namespace) {
-      return getFullname(resolveName(name, namespace));
-    }
-
-    private Schema getFullname(String fullName) {
-      Schema schema = schemas.get(fullName);
-      if (schema == null) {
-        throw new SchemaParseException("Undefined name: " + fullName);
-      }
-      return schema;
-    }
-
-    private void put(Schema schema) {
-      String fullName = schema.getFullName();
-      if (schemas.containsKey(fullName)) {
-        throw new SchemaParseException("Can't redefine: " + fullName);
-      }
-      schemas.put(fullName, schema);
-    }
-
-    private String resolveName(String name, String space) {
-      if (PRIMITIVES.contains(name) && space == null) {
-        return name;
-      }
-      int lastDot = name.lastIndexOf('.');
-      if (lastDot < 0) { // short name
-        if (space == null) {
-          space = namespace;
-        }
-        if (space != null && !"".equals(space)) {
-          return space + "." + name;
-        }
-      }
-      return name;
-    }
-  }
-
-  /**
-   * A common API for building types within a context. BaseTypeBuilder can build
-   * all types other than Unions. {@link TypeBuilder} can additionally build
-   * Unions.
-   * <p/>
-   * The builder has two contexts:
-   * <li>A naming context provides a default namespace and allows for previously
-   * defined named types to be referenced from {@link #type(String)}</li>
-   * <li>A completion context representing the scope that the builder was created
-   * in. A builder created in a nested context (for example,
-   * {@link MapBuilder#values()} will have a completion context assigned by the
-   * {@link MapBuilder}</li>
-   **/
   public static class BaseTypeBuilder<R> {
-    private final Completion<R> context;
-    private final NameContext names;
+    private BaseTypeBuilder(Completion<R> context, NameContext names) {}
 
-    private BaseTypeBuilder(Completion<R> context, NameContext names) {
-      this.context = context;
-      this.names = names;
-    }
-
-    /** Use the schema provided as the type. **/
     public final R type(Schema schema) {
-      return context.complete(schema);
+      throw new UnsupportedOperationException();
     }
 
-    /**
-     * Look up the type by name. This type must be previously defined in the context
-     * of this builder.
-     * <p/>
-     * The name may be fully qualified or a short name. If it is a short name, the
-     * default namespace of the current context will additionally be searched.
-     **/
     public final R type(String name) {
-      return type(name, null);
+      throw new UnsupportedOperationException();
     }
 
-    /**
-     * Look up the type by name and namespace. This type must be previously defined
-     * in the context of this builder.
-     * <p/>
-     * The name may be fully qualified or a short name. If it is a fully qualified
-     * name, the namespace provided is ignored. If it is a short name, the namespace
-     * provided is used if not null, else the default namespace of the current
-     * context will be used.
-     **/
     public final R type(String name, String namespace) {
-      return type(names.get(name, namespace));
+      throw new UnsupportedOperationException();
     }
 
-    /**
-     * Build an Avro fixed type. Example usage:
-     *
-     * <pre>
-     * fixed("com.foo.IPv4").size(4)
-     * </pre>
-     *
-     * Equivalent to Avro JSON Schema:
-     *
-     * <pre>
-     * {"type":"fixed", "name":"com.foo.IPv4", "size":4}
-     * </pre>
-     **/
     public final FixedBuilder<R> fixed(String name) {
       throw new UnsupportedOperationException();
     }
   }
 
-  /**
-   * A Builder for creating any Avro schema type.
-   **/
   public static final class TypeBuilder<R> extends BaseTypeBuilder<R> {
     private TypeBuilder(Completion<R> context, NameContext names) {
       super(context, names);
     }
   }
 
-  /**
-   * Completion<R> is for internal builder use, all subclasses are private.
-   *
-   * Completion is an object that takes a Schema and returns some result.
-   */
   private abstract static class Completion<R> {
     abstract R complete(Schema schema);
-  }
-
-  private static class SchemaCompletion extends Completion<Schema> {
-    @Override
-    protected Schema complete(Schema schema) {
-      return schema;
-    }
   }
 
 }
