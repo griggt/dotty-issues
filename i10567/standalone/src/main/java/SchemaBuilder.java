@@ -1,19 +1,14 @@
-  package org.apache.avro;
+package org.apache.avro;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Set;
 
 import org.apache.avro.Schema.Field;
-import org.apache.avro.util.internal.JacksonUtils;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.node.TextNode;
 
 public class SchemaBuilder {
 
@@ -31,45 +26,26 @@ public class SchemaBuilder {
    * string key-value properties.
    */
   public static abstract class PropBuilder<S extends PropBuilder<S>> {
-    private Map<String, JsonNode> props = null;
+    protected PropBuilder() {}
 
-    protected PropBuilder() {
-    }
-
-    /**
-     * Set name-value pair properties for this type or field.
-     */
     public final S prop(String name, String val) {
-      return prop(name, TextNode.valueOf(val));
+      throw new UnsupportedOperationException();
     }
 
-    /**
-     * Set name-value pair properties for this type or field.
-     */
     public final S prop(String name, Object value) {
-      return prop(name, JacksonUtils.toJsonNode(value));
+      throw new UnsupportedOperationException();
     }
 
-    // for internal use by the Parser
     final S prop(String name, JsonNode val) {
-      if (!hasProps()) {
-        props = new HashMap<>();
-      }
-      props.put(name, val);
-      return self();
+      throw new UnsupportedOperationException();
     }
 
     private boolean hasProps() {
-      return (props != null);
+      throw new UnsupportedOperationException();
     }
 
     final <T extends JsonProperties> T addPropsTo(T jsonable) {
-      if (hasProps()) {
-        for (Map.Entry<String, JsonNode> prop : props.entrySet()) {
-          jsonable.addProp(prop.getKey(), prop.getValue());
-        }
-      }
-      return jsonable;
+      throw new UnsupportedOperationException();
     }
 
     /**
@@ -89,56 +65,36 @@ public class SchemaBuilder {
    * optional.
    */
   public static abstract class NamedBuilder<S extends NamedBuilder<S>> extends PropBuilder<S> {
-    private final String name;
-    private final NameContext names;
-    private String doc;
-    private String[] aliases;
-
     protected NamedBuilder(NameContext names, String name) {
-      this.name = Objects.requireNonNull(name, "Type must have a name");
-      this.names = names;
+      throw new UnsupportedOperationException();
     }
 
-    /** configure this type's optional documentation string **/
     public final S doc(String doc) {
-      this.doc = doc;
-      return self();
+      throw new UnsupportedOperationException();
     }
 
-    /** configure this type's optional name aliases **/
     public final S aliases(String... aliases) {
-      this.aliases = aliases;
-      return self();
+      throw new UnsupportedOperationException();
     }
 
     final String doc() {
-      return doc;
+      throw new UnsupportedOperationException();
     }
 
     final String name() {
-      return name;
+      throw new UnsupportedOperationException();
     }
 
     final NameContext names() {
-      return names;
+      throw new UnsupportedOperationException();
     }
 
     final Schema addAliasesTo(Schema schema) {
-      if (null != aliases) {
-        for (String alias : aliases) {
-          schema.addAlias(alias);
-        }
-      }
-      return schema;
+      throw new UnsupportedOperationException();
     }
 
     final Field addAliasesTo(Field field) {
-      if (null != aliases) {
-        for (String alias : aliases) {
-          field.addAlias(alias);
-        }
-      }
-      return field;
+      throw new UnsupportedOperationException();
     }
   }
 
@@ -147,55 +103,27 @@ public class SchemaBuilder {
    * for all Avro types that have namespaces (Fixed, Record, and Enum).
    */
   public static abstract class NamespacedBuilder<R, S extends NamespacedBuilder<R, S>> extends NamedBuilder<S> {
-    private final Completion<R> context;
-    private String namespace;
-
     protected NamespacedBuilder(Completion<R> context, NameContext names, String name) {
       super(names, name);
-      this.context = context;
     }
 
-    /**
-     * Set the namespace of this type. To clear the namespace, set empty string.
-     * <p/>
-     * When the namespace is null or unset, the namespace of the type defaults to
-     * the namespace of the enclosing context.
-     **/
     public final S namespace(String namespace) {
-      this.namespace = namespace;
-      return self();
+      throw new UnsupportedOperationException();
     }
 
     final String space() {
-      if (null == namespace) {
-        return names().namespace;
-      }
-      return namespace;
+      throw new UnsupportedOperationException();
     }
 
     final Schema completeSchema(Schema schema) {
-      addPropsTo(schema);
-      addAliasesTo(schema);
-      names().put(schema);
-      return schema;
+      throw new UnsupportedOperationException();
     }
 
     final Completion<R> context() {
-      return context;
+      throw new UnsupportedOperationException();
     }
   }
 
-  /**
-   * Builds an Avro Fixed type with optional properties, namespace, doc, and
-   * aliases.
-   * <p/>
-   * Set properties with {@link #prop(String, String)}, namespace with
-   * {@link #namespace(String)}, doc with {@link #doc(String)}, and aliases with
-   * {@link #aliases(String[])}.
-   * <p/>
-   * The Fixed schema is finalized when its required size is set via
-   * {@link #size(int)}.
-   **/
   public static final class FixedBuilder<R> extends NamespacedBuilder<R, FixedBuilder<R>> {
     private FixedBuilder(Completion<R> context, NameContext names, String name) {
       super(context, names, name);
@@ -210,11 +138,8 @@ public class SchemaBuilder {
       return this;
     }
 
-    /** Configure this fixed type's size, and end its configuration. **/
     public R size(int size) {
-      Schema schema = Schema.createFixed(name(), super.doc(), space(), size);
-      completeSchema(schema);
-      return context().complete(schema);
+      throw new UnsupportedOperationException();
     }
   }
 
@@ -366,7 +291,7 @@ public class SchemaBuilder {
      * </pre>
      **/
     public final FixedBuilder<R> fixed(String name) {
-      return FixedBuilder.create(context, names, name);
+      throw new UnsupportedOperationException();
     }
   }
 
@@ -395,7 +320,4 @@ public class SchemaBuilder {
     }
   }
 
-  private static JsonNode toJsonNode(Object o) {
-    throw new UnsupportedOperationException();
-  }
 }
