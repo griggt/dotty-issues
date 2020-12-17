@@ -2,19 +2,12 @@ package test.http4s
 
 import test.http4s.Method.Semantics
 
-sealed abstract case class Method private (name: String) extends Semantics {}
+case class Method (name: String) extends Semantics
 
 object Method {
-  sealed trait Semantics {
-    def isIdempotent: Boolean
-    def isSafe: Boolean
-  }
-
+  sealed trait Semantics
   object Semantics {
-    trait Safe extends Semantics {
-      def isIdempotent: Boolean = true
-      def isSafe: Boolean = true
-    }
+    trait Safe extends Semantics
   }
 
   sealed trait PermitsBody extends Method
@@ -22,7 +15,7 @@ object Method {
   import Semantics._
 
   type SafeMethod = Method with Safe
-  type SafeMethodWithBody = SafeMethod with PermitsBody
+  type SafeMethodWithBody = Method with Safe /*SafeMethod*/ with PermitsBody
 
   val GET: SafeMethodWithBody = new Method("GET") with Safe with PermitsBody
 }
