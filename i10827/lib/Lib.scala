@@ -1,8 +1,6 @@
 package test.http4s
 
-import test.http4s.Method.Semantics
-
-case class Method (name: String) extends Semantics
+case class Method(name: String)
 
 object Method {
   sealed trait Semantics
@@ -14,8 +12,7 @@ object Method {
 
   import Semantics._
 
-  type SafeMethod = Method with Safe
-  type SafeMethodWithBody = Method with Safe /*SafeMethod*/ with PermitsBody
+  type SafeMethodWithBody = Method with Safe with PermitsBody
 
   val GET: SafeMethodWithBody = new Method("GET") with Safe with PermitsBody
 }
