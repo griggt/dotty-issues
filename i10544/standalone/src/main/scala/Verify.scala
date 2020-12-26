@@ -1,4 +1,4 @@
-// Verify.scala
+// Lib.scala
 import scala.quoted._
 
 class PowerAssert:
@@ -14,13 +14,13 @@ class Macro(using Quotes):
   import quotes.reflect._
 
   def apply[A: Type](x: Expr[A]): Expr[Unit] =
-    val termArg: Term = Term.of(x).underlyingArgument
+    val termArg: Term = x.asTerm.underlyingArgument
     '{
       val runtime: Runtime = ???
       ${
         Block(
-          recordExpressions(Term.of('{ runtime }), termArg),
-          Term.of('{ () })
+          recordExpressions('{ runtime }.asTerm, termArg),
+          '{ () }.asTerm
         ).asExprOf[Unit]
       }
     }
@@ -35,8 +35,8 @@ class Macro(using Quotes):
     expr match
       case New(_)     => expr
       case Literal(_) => expr
-      case Select(x@This(_), y) if expr.pos.start == x.pos.start => expr
       case Typed(r @ Repeated(xs, y), tpe) => Typed.copy(r)(recordSubValues(runtime, r), tpe)
+      case Select(x@This(_), y) if expr.pos.start == x.pos.start => expr
       case _ => recordValue(runtime, recordSubValues(runtime, expr), expr)
 
   private def recordSubValues(runtime: Term, expr: Term): Term =
@@ -53,15 +53,15 @@ class Macro(using Quotes):
   private val runtimeSym: Symbol = TypeRepr.of[Runtime].typeSymbol
 
   private def recordValue(runtime: Term, expr: Term, origExpr: Term): Term =
-    val sel: Term = runtime.select(runtimeSym.method("recordValue").head)
+    val sel: Term = runtime.select(runtimeSym.memberMethod("recordValue").head)
 
     def skipIdent(sym: Symbol): Boolean = false
     def skipSelect(sym: Symbol): Boolean = true
 
     expr match
+      case Select(_, _) if skipSelect(expr.symbol) => expr
       case TypeApply(_, _) => expr
       case Ident(_) if skipIdent(expr.symbol) => expr
-      case Select(_, _) if skipSelect(expr.symbol) => expr
       case _ =>
         val tapply = sel.appliedToType(expr.tpe)
         Apply.copy(expr)(tapply, List(expr))
